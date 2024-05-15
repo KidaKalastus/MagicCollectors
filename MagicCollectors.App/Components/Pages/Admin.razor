@@ -1,0 +1,18 @@
+﻿@page "/admin"
+@attribute [Authorize(Roles = "Admin")]
+@using Microsoft.AspNetCore.Authorization
+@inject ISetSvc SetSvc
+
+<PageTitle>Administration</PageTitle>
+
+<h1>Only admins should be able to come here</h1>
+
+<button onclick="@SyncDatabase(true)">Sync database</button>
+
+@code
+{
+    private async Task SyncDatabase(bool doSync = false)
+    {
+        await SetSvc.Sync(doSync);
+    }
+}

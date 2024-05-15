@@ -1,0 +1,16 @@
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.csproj.AssemblyReference.cache
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.AssemblyInfoInputs.cache
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.AssemblyInfo.cs
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.csproj.CoreCompileInputs.cache
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.sourcelink.json
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\bin\Debug\net8.0\MagicCollectors.Services.deps.json
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\bin\Debug\net8.0\MagicCollectors.Services.dll
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\bin\Debug\net8.0\MagicCollectors.Services.pdb
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\bin\Debug\net8.0\MagicCollectors.Core.dll
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\bin\Debug\net8.0\MagicCollectors.Core.pdb
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCol.EAD79C53.Up2Date
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.dll
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\refint\MagicCollectors.Services.dll
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\MagicCollectors.Services.pdb
+C:\Dev\Repos\MagicCollectors\MagicCollectors.Services\obj\Debug\net8.0\ref\MagicCollectors.Services.dll

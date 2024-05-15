@@ -1,0 +1,59 @@
+﻿@page "/collection"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using MagicCollectors.App.Components.Account
+@using Microsoft.AspNetCore.Authorization
+
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+@inject IdentityUserAccessor UserAccessor
+@inject ICollectionSvc CollectionSvc
+
+@attribute [Authorize]
+
+<PageTitle>Collection</PageTitle>
+
+<h1>This is your collection</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>
+
+@if(collection == null)
+{
+    <div>Loading...</div>
+}
+else if (collection.Count == 0)
+{
+    <div>You have nothing in your collection</div>
+}
+else
+{
+    <table>
+        <tr><td>Set code</td></tr>
+        @foreach (var set in collection)
+        {
+            <tr>
+                <td>@set.Set.Code</td>
+            </tr>
+        }
+    </table>    
+}
+
+@code
+{
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+    private ApplicationUser user = default!;
+    private List<CollectionSet> collection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        collection = await CollectionSvc.GetCollectionSets(user);
+    }
+}
