@@ -16,6 +16,10 @@ namespace MagicCollectors.Core.Model
         [Key]
         public Guid Id { get; set; }
 
+        public string? OracleId { get; set; }
+        public long? TcgPlayerId { get; set; }
+        public long? CardMarketId { get; set; }
+
         /// <summary>
         /// The name of this particular related card.
         /// Scryfall: name
