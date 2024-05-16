@@ -19,8 +19,6 @@ namespace MagicCollectors.Core.Data
 
         public DbSet<Card> Cards { get; set; }
 
-        public DbSet<Finish> Finishes { get; set; }
-
         public DbSet<PromoType> PromoTypes { get; set; }
 
         public DbSet<FrameEffect> FrameEffects { get; set; }

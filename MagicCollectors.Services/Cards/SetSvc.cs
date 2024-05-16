@@ -24,12 +24,8 @@ namespace MagicCollectors.Services
             cache = MemoryCache.Default;
         }
 
-        public async Task Sync(bool sync = false)
+        public async Task Sync()
         {
-            if (!sync)
-            {
-                return;
-            }
             var dbSets = new List<Set>();
 
             using (var ctx = new MagicCollectorsDbContext())
@@ -72,7 +68,6 @@ namespace MagicCollectors.Services
                     using (var ctx = new MagicCollectorsDbContext())
                     {
                         var currentSet = await ctx.Sets.FirstAsync(x => x.Id == set.Id);
-                        var finishes = await ctx.Finishes.ToDictionaryAsync(x => x.Name, x => x);
                         var promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
                         var frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
                         var cards = await importCardSvc.Get(currentSet);
@@ -80,7 +75,8 @@ namespace MagicCollectors.Services
 
                         foreach (var card in cards)
                         {
-                            card.Set = currentSet;
+                            card.Set = null;
+                            card.SetId = currentSet.Id;
                             var dbCard = setCards.FirstOrDefault(x => x.Id == card.Id);
                             if (dbCard != null)
                             {
@@ -89,20 +85,6 @@ namespace MagicCollectors.Services
                             }
                             else
                             {
-                                // Create card
-                                var dbFinishes = new List<Finish>();
-                                foreach (var finish in card.Finishes)
-                                {
-                                    if (!finishes.ContainsKey(finish.Name))
-                                    {
-                                        ctx.Finishes.Add(finish);
-                                        await ctx.SaveChangesAsync();
-                                        finishes = await ctx.Finishes.ToDictionaryAsync(x => x.Name, x => x);
-                                    }
-                                    dbFinishes.Add(finishes[finish.Name]);
-                                }
-                                card.Finishes = dbFinishes;
-
                                 var dbPromoTypes = new List<PromoType>();
                                 foreach (var promoType in card.PromoTypes)
                                 {

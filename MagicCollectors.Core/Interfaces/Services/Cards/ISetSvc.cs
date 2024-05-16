@@ -14,6 +14,6 @@ namespace MagicCollectors.Core.Interfaces.Services
         /// Get information about sets from Scryfall and add or update sets in database
         /// </summary>
         /// <returns></returns>
-        Task Sync(bool sync = false);
+        Task Sync();
     }
 }

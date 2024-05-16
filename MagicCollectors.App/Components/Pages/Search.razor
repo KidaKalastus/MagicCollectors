@@ -1,0 +1,86 @@
+﻿@page "/search"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using MagicCollectors.App.Components.Account
+@using Microsoft.AspNetCore.Authorization
+
+@inject AuthenticationStateProvider AuthenticationState
+@inject UserManager<ApplicationUser> UserManager
+@inject IdentityUserAccessor UserAccessor
+@inject ICardSvc CardSvc
+
+<PageTitle>Search</PageTitle>
+
+<div>
+    <form @onsubmit="SearchForCards">
+        <input type="text" id="txtSearch" @bind="@searchTerm" />
+    </form>
+</div>
+
+@if(searchResult == null)
+{
+    <div>Loading...</div>
+}
+else if(!searchResult.Any())
+{
+    <div>No cards found</div>
+}
+else
+{
+    <table>
+        <tr>
+            <td></td>
+            <td>Card name</td>
+            <td>Set</td>
+        </tr>
+        @foreach (var card in searchResult)
+        {
+            <tr>
+                <td>
+                    <img width="40" src="@card.Card.ImageUrlSmall" />
+                    @if(card.Card.HasTwoFaces)
+                    {
+                        <img width="40" src="@card.Card.ImageUrlSmallBack" />                        
+                    }
+                </td>
+                <td>
+                    @card.Card.Name&nbsp;
+                    @if(card.Card.FrameEffects.Any())
+                    {
+                        @string.Format("({0})", string.Join(", ", card.Card.FrameEffects.Select(x => x.Name)));
+                    }
+                </td>
+                <td><img src="@card.Card.Set.IconSvgUri" width="20" title="@card.Card.Set.Name" /></td>
+            </tr>
+        }
+    </table>
+}
+
+@code
+{
+    private ApplicationUser user = default!;
+    private List<CollectionCard> searchResult = new List<CollectionCard>();
+    private string? searchTerm = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+        var authUser = authState.User;
+        if (authUser.Identity.IsAuthenticated)
+        {
+            user = await UserManager.FindByNameAsync(authUser.Identity.Name);
+        }
+    }
+
+    private async Task SearchForCards()  
+    {
+        searchResult = null;
+        if(searchTerm != null && searchTerm.Length > 3)
+        {
+            searchResult = await CardSvc.Search(searchTerm, user);
+            searchResult = searchResult.OrderBy(x => x.Card.Set.ReleaseDate).OrderBy(x => x.Card.Name).ToList();
+        }
+    }
+}

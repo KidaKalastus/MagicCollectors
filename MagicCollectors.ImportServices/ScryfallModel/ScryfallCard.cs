@@ -6,6 +6,9 @@ namespace MagicCollectors.ImportServices
     public class ScryfallCard
     {
         public Guid id { get; set; }
+        public Guid? oracle_id { get; set; }
+        public long? tcgplayer_id { get; set; }
+        public long? cardmarket_id { get; set; }
         public string name { get; set; }
         public DateTime released_at { get; set; }
         public string mana_cost { get; set; }
@@ -26,6 +29,8 @@ namespace MagicCollectors.ImportServices
         public Prices prices { get; set; }
         public ImageUrls image_uris { get; set; }
 
+        public List<Faces> card_faces { get; set; }
+
         public Card MapToCore(bool extra = false)
         {
             Enum.TryParse(rarity, out Rarity cardRarity);
@@ -33,6 +38,9 @@ namespace MagicCollectors.ImportServices
             var card = new Card()
             {
                 Id = id,
+                OracleId = oracle_id,
+                TcgPlayerId = tcgplayer_id,
+                CardMarketId = cardmarket_id,
                 Name = name,
                 ReleaseDate = released_at,
                 ManaCost = mana_cost ?? string.Empty,
@@ -54,22 +62,44 @@ namespace MagicCollectors.ImportServices
             {
                 card.PriceUsd = Convert.ToDecimal(prices.usd, new CultureInfo("en-US"));
                 card.PriceUsdFoil = Convert.ToDecimal(prices.usd_foil, new CultureInfo("en-US"));
-
-                var etchedUsd = Convert.ToDecimal(prices.usd_etched, new CultureInfo("en-US"));
-                if (card.PriceUsdFoil == 0 && etchedUsd != 0)
-                {
-                    card.PriceUsdFoil = etchedUsd;
-                }
+                card.PriceUsdEtched = Convert.ToDecimal(prices.usd_etched, new CultureInfo("en-US"));
 
                 card.PriceEuro = Convert.ToDecimal(prices.eur, new CultureInfo("en-US"));
                 card.PriceEuroFoil = Convert.ToDecimal(prices.eur_foil, new CultureInfo("en-US"));
+
                 card.PriceTix = Convert.ToDecimal(prices.tix, new CultureInfo("en-US"));
             }
 
             if (image_uris != null)
             {
                 card.ImageDetails = image_uris.normal;
-                card.ImageDetails = card.ImageDetails.Replace("https://c1.scryfall.com/file/scryfall-cards/normal/front", "");
+                //card.ImageDetails = card.ImageDetails.Replace("https://c1.scryfall.com/file/scryfall-cards/normal/front", "");
+                card.ImageDetails = card.ImageDetails.Replace("https://cards.scryfall.io/normal/front", "");
+            }
+            else if (card_faces != null && card_faces.Any())
+            {
+                card.HasTwoFaces = true;
+                card.ManaCost = string.Join("\\", card_faces.Select(x => x.mana_cost));
+                foreach (var face in card_faces)
+                {
+                    if (face.image_uris == null)
+                    {
+                        continue;
+                    }
+
+                    if (face.image_uris.normal == null)
+                    {
+                        continue;
+                    }
+
+                    if (!face.image_uris.normal.Contains("/front/", StringComparison.CurrentCulture))
+                    {
+                        continue;
+                    }
+
+                    card.ImageDetails = face.image_uris.normal;
+                    card.ImageDetails = card.ImageDetails.Replace("https://cards.scryfall.io/normal/front", "");
+                }
             }
 
             if (promo_types != null)
@@ -82,10 +112,7 @@ namespace MagicCollectors.ImportServices
 
             if (finishes != null)
             {
-                foreach (var finish in finishes)
-                {
-                    card.Finishes.Add(new Finish() { Name = finish });
-                }
+                card.EtchedFoil = finishes.Any(x => x == "etched");
             }
 
             if (frame_effects != null)
@@ -103,6 +130,14 @@ namespace MagicCollectors.ImportServices
     public class ImageUrls
     {
         public string normal { get; set; }
+    }
+
+    public class Faces
+    {
+        public ImageUrls image_uris { get; set; }
+        public string mana_cost { get; set; }
+        public string name { get; set; }
+        public string oracle_text { get; set; }
     }
 
     public class Prices

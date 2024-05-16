@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MagicCollectors.ImportServices")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fea5951877ca5d5ba3213e8f4a1a12a50cbb0510")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e656344a74fd9fb5e2351d45c44ce1bb6e959890")]
 [assembly: System.Reflection.AssemblyProductAttribute("MagicCollectors.ImportServices")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MagicCollectors.ImportServices")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

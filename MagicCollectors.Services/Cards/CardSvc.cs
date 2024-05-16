@@ -2,6 +2,7 @@
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 
@@ -44,19 +45,6 @@ namespace MagicCollectors.Services
             {
                 var dbSet = await ctx.Sets.FirstAsync(x => x.Id == card.Set.Id);
                 card.Set = dbSet;
-
-                var dbFinishes = new List<Finish>();
-                foreach (var finish in card.Finishes)
-                {
-                    var cardDbFinish = await ctx.Finishes.FirstOrDefaultAsync(x => x.Name == finish.Name);
-                    if (cardDbFinish == null)
-                    {
-                        ctx.Finishes.Add(finish);
-                        ctx.SaveChanges();
-                    }
-                    dbFinishes.Add(cardDbFinish);
-                }
-                card.Finishes = dbFinishes;
 
                 var dbPromoTypes = new List<PromoType>();
                 foreach (var promoType in card.PromoTypes)
@@ -161,24 +149,38 @@ namespace MagicCollectors.Services
 
             using (var ctx = new MagicCollectorsDbContext())
             {
-                var cards = await ctx.Cards
-                    .Include(x => x.Set)
-                    .Include(x => x.Finishes)
-                    .Include(x => x.PromoTypes)
-                    .Include(x => x.FrameEffects)
-                    .ToListAsync();
-
-                foreach (var card in cards)
+                try
                 {
-                    if (card.Set != null)
-                    {
-                        card.Set.Cards = null;
-                    }
-                }
+                    var timer = Stopwatch.StartNew();
+                    var cards = await ctx.Cards
+                        .Include(x => x.FrameEffects).ToListAsync();
+                    var sets = await ctx.Sets.ToDictionaryAsync(x => x.Id, x => x);
 
-                cache.Add(CacheKeys.Cards, cards, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
-                return cards;
+                    /*
+                        .Include(x => x.Finishes)
+                        .Include(x => x.PromoTypes)
+                        .Include(x => x.FrameEffects)
+                        .ToListAsync();
+                    */
+
+                    var getTime = timer.Elapsed.TotalSeconds.ToString();
+                    timer = Stopwatch.StartNew();
+
+                    foreach (var card in cards)
+                    {
+                        card.Set = sets[card.SetId];
+                    }
+                    var mapTime = timer.Elapsed.TotalSeconds.ToString();
+
+                    cache.Add(CacheKeys.Cards, cards, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
+                    return cards;
+                }
+                catch (Exception ex)
+                {
+                    var something = ex.ToString();
+                }
             }
+            return new List<Card>();
         }
 
         public Task<List<Card>> Get()

@@ -2,6 +2,7 @@
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Runtime.Caching;
 
 namespace MagicCollectors.Services
@@ -184,7 +185,13 @@ namespace MagicCollectors.Services
                             newSet.CostOfMissingCards += (card.WantFoil - card.FoilCount) * card.Card.PriceUsdFoil;
                         }
 
-                        newSet.ValueOfOwnedCards += (card.Count * card.Card.PriceUsd) + (card.FoilCount * card.Card.PriceUsdFoil);
+                        if (card.WantEtched > card.EtchedCount)
+                        {
+                            newSet.Missing += card.WantEtched - card.EtchedCount;
+                            newSet.CostOfMissingCards += (card.WantEtched - card.EtchedCount) * card.Card.PriceUsdEtched;
+                        }
+
+                        newSet.ValueOfOwnedCards += (card.Count * card.Card.PriceUsd) + (card.FoilCount * card.Card.PriceUsdFoil) + (card.EtchedCount * card.Card.PriceUsdEtched);
                     }
 
                     var existingSet = sets.FirstOrDefault(x => x.Set.Id == setId);

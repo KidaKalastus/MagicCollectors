@@ -4,6 +4,7 @@ using MagicCollectors.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicCollectors.Core.Migrations
 {
     [DbContext(typeof(MagicCollectorsDbContext))]
-    partial class MagicCollectorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240516115731_RemoveFinishes")]
+    partial class RemoveFinishes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,9 +149,6 @@ namespace MagicCollectors.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Foil")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasTwoFaces")
                         .HasColumnType("bit");
 
                     b.Property<string>("ImageDetails")

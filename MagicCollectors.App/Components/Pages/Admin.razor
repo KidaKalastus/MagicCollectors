@@ -1,18 +1,25 @@
 ﻿@page "/admin"
+@rendermode InteractiveServer
 @attribute [Authorize(Roles = "Admin")]
+
 @using Microsoft.AspNetCore.Authorization
+
 @inject ISetSvc SetSvc
 
 <PageTitle>Administration</PageTitle>
 
 <h1>Only admins should be able to come here</h1>
 
-<button onclick="@SyncDatabase(true)">Sync database</button>
+<div>
+    <form @onsubmit="SyncDatabase">
+        <button>Sync database</button>
+    </form>
+</div>
 
 @code
 {
-    private async Task SyncDatabase(bool doSync = false)
+    private async Task SyncDatabase()
     {
-        await SetSvc.Sync(doSync);
+        await SetSvc.Sync();
     }
 }

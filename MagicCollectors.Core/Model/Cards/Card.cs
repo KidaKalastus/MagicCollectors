@@ -16,7 +16,7 @@ namespace MagicCollectors.Core.Model
         [Key]
         public Guid Id { get; set; }
 
-        public string? OracleId { get; set; }
+        public Guid? OracleId { get; set; }
         public long? TcgPlayerId { get; set; }
         public long? CardMarketId { get; set; }
 
@@ -32,6 +32,11 @@ namespace MagicCollectors.Core.Model
         /// Scryfall: released_at
         /// </summary>
         public DateTime ReleaseDate { get; set; }
+
+        /// <summary>
+        /// Some cards have two faces
+        /// </summary>
+        public bool HasTwoFaces { get; set; } = false;
 
         /// <summary>
         /// The mana cost for this card. This value will be any empty string "" if the cost is absent.
@@ -84,10 +89,9 @@ namespace MagicCollectors.Core.Model
         public bool NonFoil { get; set; } = false;
 
         /// <summary>
-        /// An array of computer-readable flags that indicate if this card can come in foil, nonfoil, etched, or glossy finishes.
-        /// Scryfall: finishes
+        /// Wether or not the card exists in a etched foil version
         /// </summary>
-        public List<Finish> Finishes { get; set; } = [];
+        public bool EtchedFoil { get; set; } = false;
 
         /// <summary>
         /// True if this card is a promotional print.
@@ -115,17 +119,33 @@ namespace MagicCollectors.Core.Model
 
         public string ImageUrlSmall
         {
-            get { return @"https://c1.scryfall.com/file/scryfall-cards/small/front{ImageDetails}"; }
+            //https://cards.scryfall.io/normal/front/7/b/7becaa04-f142-4163-9286-00018b95c4ca.jpg?1601138543
+            get { return $"https://cards.scryfall.io/small/front{ImageDetails}"; }
         }
 
         public string ImageUrlNormal
         {
-            get { return @"https://c1.scryfall.com/file/scryfall-cards/normal/front{ImageDetails}"; }
+            get { return $"https://cards.scryfall.io/normal/front{ImageDetails}"; }
         }
 
         public string ImageUrlLarge
         {
-            get { return @"https://c1.scryfall.com/file/scryfall-cards/large/front{ImageDetails}"; }
+            get { return $"https://cards.scryfall.io/large/front{ImageDetails}"; }
+        }
+
+        public string ImageUrlSmallBack
+        {
+            get { return $"https://cards.scryfall.io/small/back{ImageDetails}"; }
+        }
+
+        public string ImageUrlNormalBack
+        {
+            get { return $"https://cards.scryfall.io/normal/back{ImageDetails}"; }
+        }
+
+        public string ImageUrlLargeBack
+        {
+            get { return $"https://cards.scryfall.io/large/back{ImageDetails}"; }
         }
 
         /// <summary>
@@ -143,6 +163,8 @@ namespace MagicCollectors.Core.Model
         /// The set of the card
         /// </summary>
         public Set Set { get; set; }
+
+        public Guid SetId { get; set; }
 
         /// <summary>
         /// This card’s collector number. Note that collector numbers can contain non-numeric characters, such as letters or ★.
@@ -171,6 +193,11 @@ namespace MagicCollectors.Core.Model
         /// The price in USD for foil
         /// </summary>
         public decimal PriceUsdFoil { get; set; } = decimal.Zero;
+
+        /// <summary>
+        /// The price in USD for etched foil card
+        /// </summary>
+        public decimal PriceUsdEtched { get; set; } = decimal.Zero;
 
         /// <summary>
         /// Price in EURO
@@ -203,11 +230,11 @@ namespace MagicCollectors.Core.Model
         For full list see: https://scryfall.com/docs/api/cards
 
         -- "id": "504698a9-1512-4288-b5ef-392d41ebcd05",
-        "oracle_id": "a8f53018-c496-41f3-bc3f-3c4703b9e4e1",
+        -- "oracle_id": "a8f53018-c496-41f3-bc3f-3c4703b9e4e1",
         "multiverse_ids": [ 489604 ],
         "arena_id": 72182,
-        "tcgplayer_id": 216370,
-        "cardmarket_id": 473774,
+        -- "tcgplayer_id": 216370,
+        -- "cardmarket_id": 473774,
         -- "name": "Long Road Home",
         "lang": "en",
         -- "released_at": "2020-07-17",
@@ -261,11 +288,11 @@ namespace MagicCollectors.Core.Model
         "reprint": true,
         "variation": false,
         -- "set_id": "0f6ccf25-a627-4263-86df-5757137f1696",
-        "set": "jmp",
-        "set_name": "Jumpstart",
-        "set_type": "draft_innovation",
-        "set_uri": "https://api.scryfall.com/sets/0f6ccf25-a627-4263-86df-5757137f1696",
-        "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Ajmp&unique=prints",
+        -- set": "jmp",
+        -- "set_name": "Jumpstart",
+        -- "set_type": "draft_innovation",
+        -- "set_uri": "https://api.scryfall.com/sets/0f6ccf25-a627-4263-86df-5757137f1696",
+        -- "set_search_uri": "https://api.scryfall.com/cards/search?order=set&q=e%3Ajmp&unique=prints",
         "scryfall_set_uri": "https://scryfall.com/sets/jmp?utm_source=api",
         "rulings_uri": "https://api.scryfall.com/cards/504698a9-1512-4288-b5ef-392d41ebcd05/rulings",
         "prints_search_uri": "https://api.scryfall.com/cards/search?order=released&q=oracleid%3Aa8f53018-c496-41f3-bc3f-3c4703b9e4e1&unique=prints",
@@ -277,7 +304,7 @@ namespace MagicCollectors.Core.Model
         "artist": "Sidharth Chaturvedi",
         "artist_ids": [ "55e6d846-2f73-4fba-9b88-441686bb8dcb" ],
         "illustration_id": "5ca2e4d7-50a1-4580-9c1f-055b14c25c41",
-        "border_color": "black",
+        -- "border_color": "black",
         "frame": "2015",
         "full_art": false,
         "textless": false,

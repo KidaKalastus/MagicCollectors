@@ -4,6 +4,7 @@ using MagicCollectors.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MagicCollectors.Core.Migrations
 {
     [DbContext(typeof(MagicCollectorsDbContext))]
-    partial class MagicCollectorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240516091303_AddForeignIdsToCard")]
+    partial class AddForeignIdsToCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace MagicCollectors.Core.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("CardFinish", b =>
+                {
+                    b.Property<Guid>("CardsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<long>("FinishesId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("CardsId", "FinishesId");
+
+                    b.HasIndex("FinishesId");
+
+                    b.ToTable("CardFinish");
+                });
 
             modelBuilder.Entity("CardFrameEffect", b =>
                 {
@@ -136,9 +154,6 @@ namespace MagicCollectors.Core.Migrations
                     b.Property<decimal>("ConvertedManaCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<bool>("EtchedFoil")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Extra")
                         .HasColumnType("bit");
 
@@ -146,9 +161,6 @@ namespace MagicCollectors.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Foil")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasTwoFaces")
                         .HasColumnType("bit");
 
                     b.Property<string>("ImageDetails")
@@ -186,9 +198,6 @@ namespace MagicCollectors.Core.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("PriceUsd")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("PriceUsdEtched")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("PriceUsdFoil")
@@ -237,16 +246,10 @@ namespace MagicCollectors.Core.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("EtchedCount")
-                        .HasColumnType("int");
-
                     b.Property<int>("FoilCount")
                         .HasColumnType("int");
 
                     b.Property<int>("Want")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WantEtched")
                         .HasColumnType("int");
 
                     b.Property<int>("WantFoil")
@@ -297,6 +300,23 @@ namespace MagicCollectors.Core.Migrations
                     b.HasIndex("SetId");
 
                     b.ToTable("CollectionSets");
+                });
+
+            modelBuilder.Entity("MagicCollectors.Core.Model.Finish", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Finishes");
                 });
 
             modelBuilder.Entity("MagicCollectors.Core.Model.FrameEffect", b =>
@@ -513,6 +533,21 @@ namespace MagicCollectors.Core.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("CardFinish", b =>
+                {
+                    b.HasOne("MagicCollectors.Core.Model.Card", null)
+                        .WithMany()
+                        .HasForeignKey("CardsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MagicCollectors.Core.Model.Finish", null)
+                        .WithMany()
+                        .HasForeignKey("FinishesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CardFrameEffect", b =>
