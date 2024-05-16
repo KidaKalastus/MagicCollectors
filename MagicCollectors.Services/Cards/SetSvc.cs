@@ -26,110 +26,119 @@ namespace MagicCollectors.Services
 
         public async Task Sync()
         {
-            var dbSets = new List<Set>();
-
-            using (var ctx = new MagicCollectorsDbContext())
+            try
             {
-                dbSets = await ctx.Sets.ToListAsync();
-                var scryfallSets = await importSetSvc.Get();
+                var dbSets = new List<Set>();
 
-                foreach (var scryfallSet in scryfallSets)
+                using (var ctx = new MagicCollectorsDbContext())
                 {
-                    var existingSet = dbSets.FirstOrDefault(x => x.Id == scryfallSet.Id);
-                    if (existingSet != null)
+                    dbSets = await ctx.Sets.ToListAsync();
+                    var scryfallSets = await importSetSvc.Get();
+
+                    foreach (var scryfallSet in scryfallSets)
                     {
-                        ctx.Entry(existingSet).CurrentValues.SetValues(scryfallSet);
+                        var existingSet = dbSets.FirstOrDefault(x => x.Id == scryfallSet.Id);
+                        if (existingSet != null)
+                        {
+                            ctx.Entry(existingSet).CurrentValues.SetValues(scryfallSet);
+                        }
+                        else
+                        {
+                            ctx.Sets.Add(scryfallSet);
+                        }
                     }
-                    else
+
+                    foreach (var dbSet in dbSets)
                     {
-                        ctx.Sets.Add(scryfallSet);
+                        var scryfallSet = scryfallSets.FirstOrDefault(x => x.Id == dbSet.Id);
+                        if (scryfallSet == null)
+                        {
+                            ctx.Sets.Remove(dbSet);
+                        }
                     }
+
+                    await ctx.SaveChangesAsync();
+
+                    dbSets = await ctx.Sets.ToListAsync();
                 }
 
-                foreach (var dbSet in dbSets)
+                var count = 0;
+                var pageSize = 30;
+
+                foreach (var set in dbSets)
                 {
-                    var scryfallSet = scryfallSets.FirstOrDefault(x => x.Id == dbSet.Id);
-                    if (scryfallSet == null)
+                    try
                     {
-                        ctx.Sets.Remove(dbSet);
+                        using (var ctx = new MagicCollectorsDbContext())
+                        {
+                            var currentSet = await ctx.Sets.FirstAsync(x => x.Id == set.Id);
+                            var promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
+                            var frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
+                            var cards = await importCardSvc.Get(currentSet);
+                            var setCards = await ctx.Cards.Where(x => x.Set.Id == currentSet.Id).ToListAsync();
+
+                            foreach (var card in cards)
+                            {
+                                card.Set = null;
+                                card.SetId = currentSet.Id;
+                                var dbCard = setCards.FirstOrDefault(x => x.Id == card.Id);
+                                if (dbCard != null)
+                                {
+                                    // Update card
+                                    ctx.Entry(dbCard).CurrentValues.SetValues(card);
+                                }
+                                else
+                                {
+                                    var dbPromoTypes = new List<PromoType>();
+                                    foreach (var promoType in card.PromoTypes)
+                                    {
+                                        if (!promoTypes.ContainsKey(promoType.Name))
+                                        {
+                                            ctx.PromoTypes.Add(promoType);
+                                            await ctx.SaveChangesAsync();
+                                            promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
+                                        }
+                                        dbPromoTypes.Add(promoTypes[promoType.Name]);
+                                    }
+                                    card.PromoTypes = dbPromoTypes;
+
+                                    var dbFrameEffects = new List<FrameEffect>();
+                                    foreach (var effect in card.FrameEffects)
+                                    {
+                                        if (!frameEffects.ContainsKey(effect.Name))
+                                        {
+                                            ctx.FrameEffects.Add(effect);
+                                            await ctx.SaveChangesAsync();
+                                            frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
+                                        }
+                                        dbFrameEffects.Add(frameEffects[effect.Name]);
+                                    }
+                                    card.FrameEffects = dbFrameEffects;
+
+                                    ctx.Cards.Add(card);
+                                }
+                            }
+
+                            foreach (var dbCard in setCards)
+                            {
+                                if (!cards.Any(x => x.Id == dbCard.Id))
+                                {
+                                    await cardSvc.Delete(dbCard);
+                                }
+                            }
+
+                            await ctx.SaveChangesAsync();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var something = ex.ToString();
                     }
                 }
-
-                dbSets = await ctx.Sets.ToListAsync();
             }
-
-            var count = 0;
-            var pageSize = 30;
-
-            foreach (var set in dbSets)
+            catch (Exception ex)
             {
-                try
-                {
-                    using (var ctx = new MagicCollectorsDbContext())
-                    {
-                        var currentSet = await ctx.Sets.FirstAsync(x => x.Id == set.Id);
-                        var promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
-                        var frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
-                        var cards = await importCardSvc.Get(currentSet);
-                        var setCards = await ctx.Cards.Where(x => x.Set.Id == currentSet.Id).ToListAsync();
-
-                        foreach (var card in cards)
-                        {
-                            card.Set = null;
-                            card.SetId = currentSet.Id;
-                            var dbCard = setCards.FirstOrDefault(x => x.Id == card.Id);
-                            if (dbCard != null)
-                            {
-                                // Update card
-                                ctx.Entry(dbCard).CurrentValues.SetValues(card);
-                            }
-                            else
-                            {
-                                var dbPromoTypes = new List<PromoType>();
-                                foreach (var promoType in card.PromoTypes)
-                                {
-                                    if (!promoTypes.ContainsKey(promoType.Name))
-                                    {
-                                        ctx.PromoTypes.Add(promoType);
-                                        await ctx.SaveChangesAsync();
-                                        promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
-                                    }
-                                    dbPromoTypes.Add(promoTypes[promoType.Name]);
-                                }
-                                card.PromoTypes = dbPromoTypes;
-
-                                var dbFrameEffects = new List<FrameEffect>();
-                                foreach (var effect in card.FrameEffects)
-                                {
-                                    if (!frameEffects.ContainsKey(effect.Name))
-                                    {
-                                        ctx.FrameEffects.Add(effect);
-                                        await ctx.SaveChangesAsync();
-                                        frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
-                                    }
-                                    dbFrameEffects.Add(frameEffects[effect.Name]);
-                                }
-                                card.FrameEffects = dbFrameEffects;
-
-                                ctx.Cards.Add(card);
-                            }
-                        }
-
-                        foreach (var dbCard in setCards)
-                        {
-                            if (!cards.Any(x => x.Id == dbCard.Id))
-                            {
-                                await cardSvc.Delete(dbCard);
-                            }
-                        }
-
-                        await ctx.SaveChangesAsync();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    var something = ex.ToString();
-                }
+                var something = ex.ToString();
             }
         }
 

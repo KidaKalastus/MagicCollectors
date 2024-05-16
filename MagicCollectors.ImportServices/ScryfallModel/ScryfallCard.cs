@@ -1,5 +1,6 @@
 ﻿using MagicCollectors.Core.Model;
 using System.Globalization;
+using System.Net.Http.Headers;
 
 namespace MagicCollectors.ImportServices
 {
@@ -33,8 +34,6 @@ namespace MagicCollectors.ImportServices
 
         public Card MapToCore(bool extra = false)
         {
-            Enum.TryParse(rarity, out Rarity cardRarity);
-
             var card = new Card()
             {
                 Id = id,
@@ -50,7 +49,6 @@ namespace MagicCollectors.ImportServices
                 Oversized = oversized,
                 Promo = promo,
                 CollectorNumber = collector_number,
-                Rarity = cardRarity,
                 FlavorText = flavor_text,
                 Extra = extra,
                 Foil = foil,
@@ -68,6 +66,37 @@ namespace MagicCollectors.ImportServices
                 card.PriceEuroFoil = Convert.ToDecimal(prices.eur_foil, new CultureInfo("en-US"));
 
                 card.PriceTix = Convert.ToDecimal(prices.tix, new CultureInfo("en-US"));
+            }
+
+            switch (rarity)
+            {
+                case "common":
+                    card.Rarity = Rarity.Common;
+                    break;
+
+                case "uncommon":
+                    card.Rarity = Rarity.Uncommon;
+                    break;
+
+                case "rare":
+                    card.Rarity = Rarity.Rare;
+                    break;
+
+                case "special":
+                    card.Rarity = Rarity.Special;
+                    break;
+
+                case "mythic":
+                    card.Rarity = Rarity.Mythic;
+                    break;
+
+                case "bonus":
+                    card.Rarity = Rarity.Bonus;
+                    break;
+
+                default:
+                    card.Rarity = Rarity.Undefined;
+                    break;
             }
 
             if (image_uris != null)

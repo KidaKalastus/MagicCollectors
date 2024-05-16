@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Dev\\Repos\\MagicCollectors\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.importservices\\scryfallmodel\\scryfallcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|solutionrelative:magiccollectors.importservices\\scryfallmodel\\scryfallcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.core\\model\\cards\\rarity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|solutionrelative:magiccollectors.core\\model\\cards\\rarity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.core\\model\\cards\\settype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|solutionrelative:magiccollectors.core\\model\\cards\\settype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CBB3D87E-4207-45B0-BA30-D8D4546B5938}|MagicCollectors.Services\\MagicCollectors.Services.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.services\\cards\\setsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CBB3D87E-4207-45B0-BA30-D8D4546B5938}|MagicCollectors.Services\\MagicCollectors.Services.csproj|solutionrelative:magiccollectors.services\\cards\\setsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.importservices\\importcardsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|solutionrelative:magiccollectors.importservices\\importcardsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.core\\interfaces\\services\\cards\\isetsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,18 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.core\\model\\cards\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|solutionrelative:magiccollectors.core\\model\\cards\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.importservices\\importcardsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|solutionrelative:magiccollectors.importservices\\importcardsvc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.importservices\\scryfallmodel\\scryfallcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|solutionrelative:magiccollectors.importservices\\scryfallmodel\\scryfallcard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.core\\model\\cards\\settype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3095EA67-F26E-4D25-A253-C00467E778E8}|MagicCollectors.Core\\MagicCollectors.Core.csproj|solutionrelative:magiccollectors.core\\model\\cards\\settype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{34D36268-DF3C-4B94-93A2-AA1BC58A6961}|MagicCollectors.ImportServices\\MagicCollectors.ImportServices.csproj|c:\\dev\\repos\\magiccollectors\\magiccollectors.importservices\\scryfallmodel\\scryfallset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -98,7 +102,7 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": 9,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -106,7 +110,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 1,
+              "Title": "Rarity.cs",
+              "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\Rarity.cs",
+              "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Cards\\Rarity.cs",
+              "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\Rarity.cs",
+              "RelativeToolTip": "MagicCollectors.Core\\Model\\Cards\\Rarity.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-16T19:06:44.374Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "CardSvc.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Services\\Cards\\CardSvc.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Services\\Cards\\CardSvc.cs",
@@ -114,11 +131,12 @@
               "RelativeToolTip": "MagicCollectors.Services\\Cards\\CardSvc.cs",
               "ViewState": "AQIAAAsAAAAAAAAAAAAiwC8AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T09:41:27.023Z"
+              "WhenOpened": "2024-05-16T09:41:27.023Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "ISetSvc.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Interfaces\\Services\\Cards\\ISetSvc.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Interfaces\\Services\\Cards\\ISetSvc.cs",
@@ -131,32 +149,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "Card.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\Card.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Cards\\Card.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\Card.cs",
               "RelativeToolTip": "MagicCollectors.Core\\Model\\Cards\\Card.cs",
-              "ViewState": "AQIAAF0AAAAAAAAAAAA3wIEAAAAAAAAA",
+              "ViewState": "AQIAAF4AAAAAAAAAAAAYwIEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-15T14:47:39.727Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "ScryfallCard.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.ImportServices\\ScryfallModel\\ScryfallCard.cs",
               "RelativeDocumentMoniker": "MagicCollectors.ImportServices\\ScryfallModel\\ScryfallCard.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.ImportServices\\ScryfallModel\\ScryfallCard.cs",
               "RelativeToolTip": "MagicCollectors.ImportServices\\ScryfallModel\\ScryfallCard.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAA4wCMAAAAqAAAA",
+              "ViewState": "AQIAADEAAAAAAAAAAAAYwFwAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-15T14:50:44.125Z"
+              "WhenOpened": "2024-05-15T14:50:44.125Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "Search.razor",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.App\\Components\\Pages\\Search.razor",
               "RelativeDocumentMoniker": "MagicCollectors.App\\Components\\Pages\\Search.razor",
@@ -169,7 +188,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "20240516115731_RemoveFinishes.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Migrations\\20240516115731_RemoveFinishes.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Migrations\\20240516115731_RemoveFinishes.cs",
@@ -177,23 +196,25 @@
               "RelativeToolTip": "MagicCollectors.Core\\Migrations\\20240516115731_RemoveFinishes.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACUAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T11:57:32.104Z"
+              "WhenOpened": "2024-05-16T11:57:32.104Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "ImportCardSvc.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.ImportServices\\ImportCardSvc.cs",
               "RelativeDocumentMoniker": "MagicCollectors.ImportServices\\ImportCardSvc.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.ImportServices\\ImportCardSvc.cs",
               "RelativeToolTip": "MagicCollectors.ImportServices\\ImportCardSvc.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAIAwwBwAAAANAAAA",
+              "ViewState": "AQIAAAIAAAAAAAAAAIAwwBkAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T12:01:05.28Z"
+              "WhenOpened": "2024-05-16T12:01:05.28Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "MagicCollectorsDbContext.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Data\\MagicCollectorsDbContext.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Data\\MagicCollectorsDbContext.cs",
@@ -201,36 +222,38 @@
               "RelativeToolTip": "MagicCollectors.Core\\Data\\MagicCollectorsDbContext.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T11:29:11.313Z"
+              "WhenOpened": "2024-05-16T11:29:11.313Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "SetSvc.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Services\\Cards\\SetSvc.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Services\\Cards\\SetSvc.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Services\\Cards\\SetSvc.cs",
               "RelativeToolTip": "MagicCollectors.Services\\Cards\\SetSvc.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBwAAAAMAAAA",
+              "ViewState": "AQIAAGoAAAAAAAAAAIAwwIQAAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-14T14:51:15.914Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 2,
               "Title": "SetType.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\SetType.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Cards\\SetType.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\SetType.cs",
               "RelativeToolTip": "MagicCollectors.Core\\Model\\Cards\\SetType.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAgwEwAAAAHAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABsAAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T12:47:21.094Z"
+              "WhenOpened": "2024-05-16T12:47:21.094Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Admin.razor",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.App\\Components\\Pages\\Admin.razor",
               "RelativeDocumentMoniker": "MagicCollectors.App\\Components\\Pages\\Admin.razor",
@@ -243,7 +266,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "ScryfallSet.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.ImportServices\\ScryfallModel\\ScryfallSet.cs",
               "RelativeDocumentMoniker": "MagicCollectors.ImportServices\\ScryfallModel\\ScryfallSet.cs",
@@ -251,11 +274,12 @@
               "RelativeToolTip": "MagicCollectors.ImportServices\\ScryfallModel\\ScryfallSet.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAAiAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T12:47:35.614Z"
+              "WhenOpened": "2024-05-16T12:47:35.614Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "CollectionCard.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Collector\\CollectionCard.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Collector\\CollectionCard.cs",
@@ -263,11 +287,12 @@
               "RelativeToolTip": "MagicCollectors.Core\\Model\\Collector\\CollectionCard.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T11:51:08.438Z"
+              "WhenOpened": "2024-05-16T11:51:08.438Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "20240516123543_AddEtchedAndTwoFaces.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Migrations\\20240516123543_AddEtchedAndTwoFaces.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Migrations\\20240516123543_AddEtchedAndTwoFaces.cs",
@@ -275,11 +300,12 @@
               "RelativeToolTip": "MagicCollectors.Core\\Migrations\\20240516123543_AddEtchedAndTwoFaces.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T12:35:43.869Z"
+              "WhenOpened": "2024-05-16T12:35:43.869Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "CollectionSet.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Collector\\CollectionSet.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Collector\\CollectionSet.cs",
@@ -287,11 +313,12 @@
               "RelativeToolTip": "MagicCollectors.Core\\Model\\Collector\\CollectionSet.cs",
               "ViewState": "AQIAABIAAAAAAAAAAAAWwDUAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T11:54:06.211Z"
+              "WhenOpened": "2024-05-16T11:54:06.211Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "CollectionSvc.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Services\\Collector\\CollectionSvc.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Services\\Collector\\CollectionSvc.cs",
@@ -299,11 +326,12 @@
               "RelativeToolTip": "MagicCollectors.Services\\Collector\\CollectionSvc.cs",
               "ViewState": "AQIAAIgAAAAAAAAAAAAcwMYAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T11:54:24.032Z"
+              "WhenOpened": "2024-05-16T11:54:24.032Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "Set.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Model\\Cards\\Set.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Model\\Cards\\Set.cs",
@@ -311,11 +339,12 @@
               "RelativeToolTip": "MagicCollectors.Core\\Model\\Cards\\Set.cs",
               "ViewState": "AQIAAD4AAAAAAAAAAAAAwGIAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-15T16:54:27.527Z"
+              "WhenOpened": "2024-05-15T16:54:27.527Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "Collection.razor",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.App\\Components\\Pages\\Collection.razor",
               "RelativeDocumentMoniker": "MagicCollectors.App\\Components\\Pages\\Collection.razor",
@@ -323,11 +352,12 @@
               "RelativeToolTip": "MagicCollectors.App\\Components\\Pages\\Collection.razor",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAkAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-16T07:38:14.812Z"
+              "WhenOpened": "2024-05-16T07:38:14.812Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.App\\Components\\_Imports.razor",
               "RelativeDocumentMoniker": "MagicCollectors.App\\Components\\_Imports.razor",
@@ -335,11 +365,12 @@
               "RelativeToolTip": "MagicCollectors.App\\Components\\_Imports.razor",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAaAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-16T07:40:32.672Z"
+              "WhenOpened": "2024-05-16T07:40:32.672Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "20240516091303_AddForeignIdsToCard.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Migrations\\20240516091303_AddForeignIdsToCard.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Migrations\\20240516091303_AddForeignIdsToCard.cs",
@@ -347,11 +378,12 @@
               "RelativeToolTip": "MagicCollectors.Core\\Migrations\\20240516091303_AddForeignIdsToCard.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAACoAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-16T09:13:03.737Z"
+              "WhenOpened": "2024-05-16T09:13:03.737Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "NavMenu.razor",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.App\\Components\\Layout\\NavMenu.razor",
               "RelativeDocumentMoniker": "MagicCollectors.App\\Components\\Layout\\NavMenu.razor",
@@ -359,19 +391,21 @@
               "RelativeToolTip": "MagicCollectors.App\\Components\\Layout\\NavMenu.razor",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-05-16T08:44:31.308Z"
+              "WhenOpened": "2024-05-16T08:44:31.308Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "20240515152110_AddInitialValues.cs",
               "DocumentMoniker": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Migrations\\20240515152110_AddInitialValues.cs",
               "RelativeDocumentMoniker": "MagicCollectors.Core\\Migrations\\20240515152110_AddInitialValues.cs",
               "ToolTip": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\Migrations\\20240515152110_AddInitialValues.cs",
               "RelativeToolTip": "MagicCollectors.Core\\Migrations\\20240515152110_AddInitialValues.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAACkAAAArAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAIBJwCkAAAArAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-15T15:21:11.22Z"
+              "WhenOpened": "2024-05-15T15:21:11.22Z",
+              "EditorCaption": ""
             }
           ]
         },
