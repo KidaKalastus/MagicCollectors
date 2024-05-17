@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MagicCollectors.App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f0ce5c1c148602feeee6a51455cc856eb3539d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f45dc7daefd996eaabf27b6def2cb5cb5d253918")]
 [assembly: System.Reflection.AssemblyProductAttribute("MagicCollectors.App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MagicCollectors.App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
