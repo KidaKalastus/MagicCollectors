@@ -1,6 +1,7 @@
 ﻿@page "/search"
 @rendermode InteractiveServer
 
+@using MagicCollectors.App.Components.Components
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.AspNetCore.Authorization
@@ -36,21 +37,9 @@ else
         @foreach (var card in searchResult)
         {
             <tr>
-                <td>
-                    <img width="40" src="@card.Card.ImageUrlSmall" />
-                    @if(card.Card.HasTwoFaces)
-                    {
-                        <img width="40" src="@card.Card.ImageUrlSmallBack" />                        
-                    }
+                <td colspan="3">
+                    <Card card="card" user="user" />
                 </td>
-                <td>
-                    @card.Card.Name&nbsp;
-                    @if(card.Card.FrameEffects.Any())
-                    {
-                        @string.Format("({0})", string.Join(", ", card.Card.FrameEffects.Select(x => x.Name)));
-                    }
-                </td>
-                <td><img src="@card.Card.Set.IconSvgUri" width="20" title="@card.Card.Set.Name" /></td>
             </tr>
         }
     </table>

@@ -1,6 +1,87 @@
 ﻿@rendermode InteractiveServer
 
-@card.Card.Name<br />
+<div class="card-view">
+    <div class="grid-child">@card.Card.CollectorNumber</div>
+    <div class="grid-child">
+        
+        @if (card.Card.HasTwoFaces)
+        {
+
+            <a class="card-name">
+                @firstName
+                <img src="@card.Card.ImageUrlNormal" />
+            </a>
+            <span>&nbsp;//&nbsp;</span>
+            <a class="card-name">
+                @secondName
+                <img src="@card.Card.ImageUrlNormalBack" />
+            </a>
+
+            
+        }
+        else
+        {
+            <a class="card-name">
+                @card.Card.Name
+                <img src="@card.Card.ImageUrlNormal" />
+            </a>
+        }
+
+    </div>
+    <div class="grid-child card-numbers">
+        <div v-if="card.Card.NonFoil">
+            <input type="number" @bind="@card.Count" /> /
+            <input type="number" @bind="@card.Want" /> /
+            @card.Card.PriceUsd
+        </div>
+    </div>
+    <div class="grid-child card-numbers">
+        <div v-if="card.Card.Foil">
+            <input type="number" @bind="@card.FoilCount" /> /
+            <input type="number" v-model="@card.WantFoil" /> /
+            @card.Card.PriceUsdFoil
+        </div>
+    </div>
+    <div class="grid-child card-numbers">
+        <div v-if="card.Card.Etched">
+            <input type="number" @bind="@card.EtchedCount" /> /
+            <input type="number" v-model="@card.WantEtched" /> /
+            @card.Card.PriceUsdEtched
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-view {
+        display: grid;
+        grid-template-columns: 1fr 6fr 2fr 2fr 2fr;
+    }
+
+    .card-name {
+        position: relative;
+    }
+
+        .card-name img {
+            display: none;
+        }
+
+        .card-name:hover img {
+            display: block;
+            position: absolute;
+            top: -200px;
+            left: 100px;
+            z-index: 1;
+        }
+
+    .card-numbers {
+        /*text-align: center;*/
+    }
+
+    input[type='number'] {
+        width: 30px;
+    }
+
+</style>
 
 @code {
     [Parameter]
@@ -8,4 +89,21 @@
 
     [Parameter]
     public ApplicationUser user { get; set; }
+
+    public string? firstName { get; set; }
+    public string? secondName { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if(card.Card.Name.IndexOf("//") > 0)
+        {
+            var names = card.Card.Name.Split("//");
+            firstName = names.First();
+            secondName = names.Last();
+        }
+
+        return base.OnInitializedAsync();
+    }
 }
+
+

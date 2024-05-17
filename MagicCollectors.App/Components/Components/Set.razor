@@ -2,25 +2,79 @@
 
 @inject ICardSvc cardSvc;
 
-<tr>
-    <td><img src="@set.Set.IconSvgUri" /></td>
-    <td>@set.Set.Code</td>
-    <td>
-        @set.Set.Name 
-        
-        <form @onsubmit="GetCards">
-            <button>Get</button>
-        </form>
-    </td>
-</tr>
-<tr>
-    <td colspan="3">
+
+
+<div>
+    <div class="set-header">
+
+        <div class="grid-child">
+            <h3>@set.Set.Name <img src="@set.Set.IconSvgUri" height="18" /></h3>
+            Count: @set.Count (@set.ValueOfOwnedCards USD) / Missing: @set.Missing (@set.CostOfMissingCards USD)
+        </div>
+
+        <div class="grid-child header-button">
+
+            <form @onsubmit="GetCards">
+                <button>Show cards</button>
+            </form>
+            <form @onsubmit="UpdateCollection">
+                <button>Update collection</button>
+            </form>
+        </div>
+    </div>
+
+    <div v-show="showCards">
+
+        <div class="cards-header">
+            <div class="grid-child">No.</div>
+            <div class="grid-child">Name</div>
+            <div class="grid-child card-numbers">
+                Normal <br />
+                Has / Wants / Price
+            </div>
+            <div class="grid-child card-numbers">
+                Foil <br />
+                Has / Wants / Price
+            </div>
+            <div class="grid-child card-numbers">
+                Etched <br />
+                Has / Wants / Price
+            </div>
+        </div>
+
         @foreach (var card in cards)
         {
-            <Card card="card" user="user" />
+            <div>
+                <Card card="card" user="user" />
+            </div>
         }
-    </td>
-</tr>
+    </div>
+</div>
+
+<style>
+    .set-header {
+        display: grid;
+        grid-template-columns: 5fr 1fr;
+        border: 1px solid black;
+        padding: 5px;
+    }
+
+    .header-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cards-header {
+        display: grid;
+        grid-template-columns: 1fr 6fr 2fr 2fr 2fr;
+    }
+
+    .card-numbers {
+        /*text-align: center;*/
+    }
+</style>
+
 @code {
     [Parameter]
     public CollectionSet set { get; set; }
@@ -36,6 +90,11 @@
     }
 
     protected async Task GetCards()
+    {
+        cards = await cardSvc.Get(set.Set, user);
+    }
+
+    protected async Task UpdateCollection()
     {
         cards = await cardSvc.Get(set.Set, user);
     }

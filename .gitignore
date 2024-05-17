@@ -254,3 +254,4 @@ CloudPortal.Infrastructure.Database/CloudPortal.Infrastructure.Database.jfm
 CloudPortal.Web.Api/App_Data/CloudPortal.Core.xml
 CloudPortal.Web.Api/App_Data/CloudPortal.Web.Api.xml
 CloudPortal.Web.LanguageEditor/css
+/MagicCollectors.App/obj/Debug/net8.0/project.razor.vs.bin
