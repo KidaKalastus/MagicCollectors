@@ -1,20 +1,43 @@
 ﻿@page "/collection"
+@rendermode InteractiveServer
 
 @using Microsoft.AspNetCore.Identity
-@using MagicCollectors.App.Components.Account
+@using MagicCollectors.App.Components.Components
 
-@inject IdentityUserAccessor UserAccessor
-@inject ICollectionSvc CollectionSvc
+@inject AuthenticationStateProvider authenticationState
+@inject UserManager<ApplicationUser> userManager
+@inject ICollectionSvc collectionSvc
+@inject ISetSvc setSvc;
 
 @attribute [Authorize]
 
 <PageTitle>Collection</PageTitle>
 
-<h1>This is your collection</h1>
-
-<AuthorizeView>
-    Hello @context.User.Identity?.Name!
-</AuthorizeView>
+<InputSelect Value="@selectTypeId" TValue="int" ValueChanged="@(FilterSets)" ValueExpression="@( () => selectTypeId )">
+    <option value="1">Core sets</option>
+    <option value="2">Expansion sets</option>
+    <option value="13">Commander</option>
+    <option value="3">Master sets</option>
+    <option value="5">Masterpieces</option>
+    <option value="6">Arsenal</option>
+    <option value="7">From the Vault</option>
+    <option value="8">Spellbook</option>
+    <option value="9">Premium Deck</option>
+    <option value="10">Duel Deck</option>
+    <option value="11">Draft Innovation</option>
+    <option value="12">Treasure Chest</option>
+    <option value="14">Planechase</option>
+    <option value="15">Archenemy</option>
+    <option value="16">Vanguard</option>
+    <option value="17">Funny</option>
+    <option value="18">Starter</option>
+    <option value="19">Box</option>
+    <option value="20">Promo</option>
+    <option value="22">Memorabilia</option>
+    <option value="23">Minigame</option>
+    <option value="4">Alchemy</option>
+    <option value="21">Token</option>
+</InputSelect>
 
 @if(collection == null)
 {
@@ -27,26 +50,43 @@ else if (collection.Count == 0)
 else
 {
     <table>
-        <tr><td>Set code</td></tr>
-        @foreach (var set in collection)
+        <tr>
+            <td>Icon</td>
+            <td>Code</td>
+            <td>Name</td>
+        </tr>
+        @foreach (var set in shownSets)
         {
-            <tr>
-                <td>@set.Set.Code</td>
-            </tr>
+            <Set set="set" user="user" />
         }
     </table>    
 }
 
 @code
 {
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
     private ApplicationUser user = default!;
-    private List<CollectionSet> collection;
+    private List<CollectionSet> collection { get; set; } = new List<CollectionSet>();
+    private List<CollectionSet> shownSets { get; set; } = new List<CollectionSet>();
+    private int selectTypeId = 1;
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
-        collection = await CollectionSvc.GetCollectionSets(user);
+        var authState = await authenticationState.GetAuthenticationStateAsync();
+        var authUser = authState.User;
+        if (authUser.Identity.IsAuthenticated)
+        {
+            user = await userManager.FindByNameAsync(authUser.Identity.Name);
+        }
+
+        collection = await setSvc.Get(user);
+        shownSets = collection.Where(x => x.Set.Type == SetType.core).ToList();
+    }
+
+    protected void FilterSets(int value)
+    {
+        var type = (SetType)value;
+        shownSets = collection.Where(x => x.Set.Type == type).ToList();
+        selectTypeId = value;
+        StateHasChanged();
     }
 }

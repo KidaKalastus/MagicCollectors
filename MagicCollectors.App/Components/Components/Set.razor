@@ -1,0 +1,42 @@
+﻿@rendermode InteractiveServer
+
+@inject ICardSvc cardSvc;
+
+<tr>
+    <td><img src="@set.Set.IconSvgUri" /></td>
+    <td>@set.Set.Code</td>
+    <td>
+        @set.Set.Name 
+        
+        <form @onsubmit="GetCards">
+            <button>Get</button>
+        </form>
+    </td>
+</tr>
+<tr>
+    <td colspan="3">
+        @foreach (var card in cards)
+        {
+            <Card card="card" user="user" />
+        }
+    </td>
+</tr>
+@code {
+    [Parameter]
+    public CollectionSet set { get; set; }
+    [Parameter]
+    public ApplicationUser user { get; set; }
+    protected List<CollectionCard> cards { get; set; } = new List<CollectionCard>();
+    
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        // The list of cards must be reset when a new set is loaded in the component
+        cards = new List<CollectionCard>();
+        await base.SetParametersAsync(parameters);
+    }
+
+    protected async Task GetCards()
+    {
+        cards = await cardSvc.Get(set.Set, user);
+    }
+}

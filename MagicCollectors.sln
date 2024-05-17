@@ -5,11 +5,11 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicCollectors.App", "MagicCollectors.App\MagicCollectors.App.csproj", "{6036CC70-0170-4224-ACCD-F60C3862F48B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCollectors.Core", "MagicCollectors.Core\MagicCollectors.Core.csproj", "{3095EA67-F26E-4D25-A253-C00467E778E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicCollectors.Core", "MagicCollectors.Core\MagicCollectors.Core.csproj", "{3095EA67-F26E-4D25-A253-C00467E778E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCollectors.Services", "MagicCollectors.Services\MagicCollectors.Services.csproj", "{CBB3D87E-4207-45B0-BA30-D8D4546B5938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicCollectors.Services", "MagicCollectors.Services\MagicCollectors.Services.csproj", "{CBB3D87E-4207-45B0-BA30-D8D4546B5938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicCollectors.ImportServices", "MagicCollectors.ImportServices\MagicCollectors.ImportServices.csproj", "{34D36268-DF3C-4B94-93A2-AA1BC58A6961}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicCollectors.ImportServices", "MagicCollectors.ImportServices\MagicCollectors.ImportServices.csproj", "{34D36268-DF3C-4B94-93A2-AA1BC58A6961}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

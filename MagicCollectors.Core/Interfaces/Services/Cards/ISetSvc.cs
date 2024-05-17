@@ -8,7 +8,7 @@ namespace MagicCollectors.Core.Interfaces.Services
         /// Get all sets
         /// </summary>
         /// <returns></returns>
-        Task<List<CollectionSet>> Get(bool sync, ApplicationUser collector = null);
+        Task<List<CollectionSet>> Get(ApplicationUser collector = null);
 
         /// <summary>
         /// Get information about sets from Scryfall and add or update sets in database

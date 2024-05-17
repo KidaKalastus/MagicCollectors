@@ -142,13 +142,8 @@ namespace MagicCollectors.Services
             }
         }
 
-        public async Task<List<CollectionSet>> Get(bool sync, ApplicationUser collector = null)
+        public async Task<List<CollectionSet>> Get(ApplicationUser collector = null)
         {
-            if (sync)
-            {
-                await Sync();
-            }
-
             var sets = (await GetFromCache()).OrderBy(x => x.ReleaseDate).ToList();
 
             return await LoadSetsWithCollectionInfo(sets, collector);
