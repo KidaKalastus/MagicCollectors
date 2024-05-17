@@ -29,24 +29,39 @@
 
     </div>
     <div class="grid-child card-numbers">
-        <div v-if="card.Card.NonFoil">
-            <input type="number" @bind="@card.Count" /> /
-            <input type="number" @bind="@card.Want" /> /
-            @card.Card.PriceUsd
+        <div>
+            @if (card.Card.NonFoil)
+            {
+                <span>
+                    <input type="number" @bind="@card.Count" /> /
+                    <input type="number" @bind="@card.Want" /> /
+                    @card.Card.PriceUsd
+                </span>
+            }
         </div>
     </div>
     <div class="grid-child card-numbers">
-        <div v-if="card.Card.Foil">
-            <input type="number" @bind="@card.FoilCount" /> /
-            <input type="number" v-model="@card.WantFoil" /> /
-            @card.Card.PriceUsdFoil
+        <div>
+            @if (card.Card.Foil)
+            {
+                <span>
+                    <input type="number" @bind="@card.FoilCount" /> /
+                    <input type="number" v-model="@card.WantFoil" /> /
+                    @card.Card.PriceUsdFoil
+                </span>
+            }
         </div>
     </div>
     <div class="grid-child card-numbers">
-        <div v-if="card.Card.Etched">
-            <input type="number" @bind="@card.EtchedCount" /> /
-            <input type="number" v-model="@card.WantEtched" /> /
-            @card.Card.PriceUsdEtched
+        <div>
+            @if (card.Card.EtchedFoil)
+            {
+                <span>
+                    <input type="number" @bind="@card.EtchedCount" /> /
+                    <input type="number" v-model="@card.WantEtched" /> /
+                    @card.Card.PriceUsdEtched
+                </span>
+            }
         </div>
     </div>
 </div>
