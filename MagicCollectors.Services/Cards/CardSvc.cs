@@ -2,7 +2,6 @@
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 
@@ -10,18 +9,23 @@ namespace MagicCollectors.Services
 {
     public class CardSvc : ICardSvc
     {
+        private readonly IRepositorySvc repo;
         private readonly ICollectionSvc collectionSvc;
-        private static MemoryCache cache;
 
-        public CardSvc(ICollectionSvc collectionSvc)
+        public CardSvc(IRepositorySvc repo, ICollectionSvc collectionSvc)
         {
+            this.repo = repo;
             this.collectionSvc = collectionSvc;
-            cache = MemoryCache.Default;
+        }
+
+        public Task<List<Card>> Get()
+        {
+            return repo.Get<Card>();
         }
 
         public async Task<List<CollectionCard>> Search(string query, ApplicationUser collector = null)
         {
-            var cards = await GetFromCache();
+            var cards = await repo.Get<Card>();
 
             var pattern = query.Replace(" ", ".*");
             cards = cards.Where(x => Regex.IsMatch(x.Name, pattern, RegexOptions.IgnoreCase)).ToList();
@@ -31,7 +35,7 @@ namespace MagicCollectors.Services
 
         public async Task<List<CollectionCard>> Get(Set set, ApplicationUser collector = null)
         {
-            var cards = await GetFromCache();
+            var cards = await repo.Get<Card>();
             cards = cards.Where(x => string.Compare(x.Set.Code, set.Code, StringComparison.OrdinalIgnoreCase) == 0).ToList();
 
             return await LoadCardsWithCollectionInfo(cards, collector);
@@ -39,8 +43,6 @@ namespace MagicCollectors.Services
 
         public async Task<Card> Create(Card card)
         {
-            cache.Remove(CacheKeys.Cards);
-
             using (var ctx = new MagicCollectorsDbContext())
             {
                 var dbSet = await ctx.Sets.FirstAsync(x => x.Id == card.Set.Id);
@@ -81,7 +83,7 @@ namespace MagicCollectors.Services
 
         public async Task<Card> Update(Card card)
         {
-            cache.Remove(CacheKeys.Cards);
+            repo.Reset(CacheKeys.Cards);
 
             using (var ctx = new MagicCollectorsDbContext())
             {
@@ -101,7 +103,7 @@ namespace MagicCollectors.Services
 
         public async Task Delete(Card card)
         {
-            cache.Remove(CacheKeys.Cards);
+            repo.Reset(CacheKeys.Cards);
 
             using (var ctx = new MagicCollectorsDbContext())
             {
@@ -138,54 +140,6 @@ namespace MagicCollectors.Services
             }
 
             return result;
-        }
-
-        private async Task<List<Card>> GetFromCache()
-        {
-            if (cache.Contains(CacheKeys.Cards))
-            {
-                return cache[CacheKeys.Cards] as List<Card>;
-            }
-
-            using (var ctx = new MagicCollectorsDbContext())
-            {
-                try
-                {
-                    var timer = Stopwatch.StartNew();
-                    var cards = await ctx.Cards
-                        .Include(x => x.FrameEffects).ToListAsync();
-                    var sets = await ctx.Sets.ToDictionaryAsync(x => x.Id, x => x);
-
-                    /*
-                        .Include(x => x.Finishes)
-                        .Include(x => x.PromoTypes)
-                        .Include(x => x.FrameEffects)
-                        .ToListAsync();
-                    */
-
-                    var getTime = timer.Elapsed.TotalSeconds.ToString();
-                    timer = Stopwatch.StartNew();
-
-                    foreach (var card in cards)
-                    {
-                        card.Set = sets[card.SetId];
-                    }
-                    var mapTime = timer.Elapsed.TotalSeconds.ToString();
-
-                    cache.Add(CacheKeys.Cards, cards, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
-                    return cards;
-                }
-                catch (Exception ex)
-                {
-                    var something = ex.ToString();
-                }
-            }
-            return new List<Card>();
-        }
-
-        public Task<List<Card>> Get()
-        {
-            return GetFromCache();
         }
     }
 }

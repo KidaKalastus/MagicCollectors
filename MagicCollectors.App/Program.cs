@@ -49,6 +49,7 @@ builder.Services.AddScoped<ISetSvc, SetSvc>();
 builder.Services.AddScoped<ICardSvc, CardSvc>();
 builder.Services.AddScoped<IImportSetSvc, ImportSetSvc>();
 builder.Services.AddScoped<IImportCardSvc, ImportCardSvc>();
+builder.Services.AddScoped<IRepositorySvc, RepositorySvc>();
 
 var app = builder.Build();
 

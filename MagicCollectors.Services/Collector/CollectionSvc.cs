@@ -2,167 +2,108 @@
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
-using System.Runtime.Caching;
+using Org.BouncyCastle.Crypto.Signers;
+using System.Diagnostics;
 
 namespace MagicCollectors.Services
 {
     public class CollectionSvc : ICollectionSvc
     {
-        private static MemoryCache cache;
+        private readonly IRepositorySvc repo;
 
-        public CollectionSvc()
+        public CollectionSvc(IRepositorySvc repo)
         {
-            cache = MemoryCache.Default;
+            this.repo = repo;
         }
 
         public async Task<List<CollectionCard>> Update(ApplicationUser collector, List<CollectionCard> updatedCards)
         {
-            var collection = await GetCollectionCards(collector);
-            foreach (var card in updatedCards)
+            using (var ctx = new MagicCollectorsDbContext())
             {
-                // Check on the ID of the collection card
-                if (collection.Any(x => x.Id == card.Id))
+                var timer = Stopwatch.StartNew();
+
+                var dbCollector = await ctx.Users
+                    .Include(x => x.CollectionCards)
+                    .FirstAsync(x => x.Id == collector.Id);
+
+                var timer1 = $"It took {timer.Elapsed.TotalSeconds} ms to get collector";
+                timer = Stopwatch.StartNew();
+
+                foreach (var updatedCard in updatedCards)
                 {
-                    using (var ctx = new MagicCollectorsDbContext())
+                    var dbCollectionCard = dbCollector.CollectionCards.FirstOrDefault(x => x.CardId == updatedCard.Card.Id);
+
+                    if (dbCollectionCard != null)
                     {
-                        var dbCard = await ctx.CollectionCards.FirstAsync(x => x.Id == card.Id);
-
-                        dbCard.Load(card);
-
-                        await ctx.SaveChangesAsync();
+                        dbCollectionCard.Load(updatedCard);
                     }
-                    continue;
-                }
-
-                // Check on the ID of the actual card
-                var collectionCard = collection.FirstOrDefault(x => x.Card.Id == card.Card.Id);
-                if (collectionCard != null)
-                {
-                    collectionCard.Load(card);
-                    using (var ctx = new MagicCollectorsDbContext())
+                    else
                     {
-                        var dbCard = await ctx.CollectionCards.FirstAsync(x => x.Id == collectionCard.Id);
-
-                        dbCard.Load(card);
-
-                        await ctx.SaveChangesAsync();
+                        dbCollector.CollectionCards.Add(updatedCard);
                     }
-                    continue;
                 }
 
-                using (var ctx = new MagicCollectorsDbContext())
-                {
-                    var dbCollector = await ctx.Users
-                        .Include(x => x.CollectionCards)
-                        .FirstAsync(x => x.Id == collector.Id);
+                var timer2 = $"It took {timer.Elapsed.TotalSeconds} ms to update cards";
+                timer = Stopwatch.StartNew();
 
-                    card.Card = await ctx.Cards.FirstAsync(x => x.Id == card.Card.Id);
+                await ctx.SaveChangesAsync();
 
-                    dbCollector.CollectionCards.Add(card);
+                var timer3 = $"It took {timer.Elapsed.TotalSeconds} ms to save changes";
+                timer = Stopwatch.StartNew();
 
-                    await ctx.SaveChangesAsync();
-                }
+                repo.Reset($"{CacheKeys.CollectionSets}_{collector.Id}");
+                repo.Reset($"{CacheKeys.CollectionCards}_{collector.Id}");
+
+                var timer4 = $"It took {timer.Elapsed.TotalSeconds} ms to clear cache";
+                timer = Stopwatch.StartNew();
+
+                await UpdateCollectionSets(collector);
+
+                var timer5 = $"It took {timer.Elapsed.TotalSeconds} ms to update sets";
+                timer = Stopwatch.StartNew();
+
+                var collection = await GetCollectionCards(collector);
+
+                var timer6 = $"It took {timer.Elapsed.TotalSeconds} ms to get collection cards";
+                timer = Stopwatch.StartNew();
+
+                return collection.Where(x => updatedCards.Select(y => y.Id).Contains(x.Id)).ToList();
             }
-
-            cache.Remove($"{CacheKeys.CollectionCards}_{collector.Id}");
-
-            collection = await GetCollectionCards(collector);
-
-            DeleteCollectionSetsFromCache(collector);
-
-            return collection.Where(x => updatedCards.Select(y => y.Id).Contains(x.Id)).ToList();
         }
 
         public async Task<List<CollectionCard>> GetCollectionCards(ApplicationUser collector)
         {
             if (collector == null)
             {
-                return new List<CollectionCard>();
+                return [];
             }
 
-            var cacheKey = $"{CacheKeys.CollectionCards}_{collector.Id}";
-
-            if (cache.Contains(cacheKey))
-            {
-                return cache[cacheKey] as List<CollectionCard>;
-            }
-
-            using (var ctx = new MagicCollectorsDbContext())
-            {
-                var dbCollector = await ctx.Users
-                    .Include(x => x.CollectionCards)
-                    .FirstOrDefaultAsync(x => x.Id == collector.Id);
-
-                var collection = dbCollector.CollectionCards;
-
-                foreach (var card in collection)
-                {
-                    if (card.Card != null && card.Card.Set != null)
-                    {
-                        card.Card.Set.Cards = null;
-                    }
-                }
-
-                cache.Add(cacheKey, collection, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
-
-                return collection;
-            }
-        }
-
-        private void DeleteCollectionSetsFromCache(ApplicationUser collector)
-        {
-            var cacheKey = $"{CacheKeys.CollectionSets}_{collector.Id}";
-            cache.Remove(cacheKey);
+            return await repo.Get<CollectionCard>(collector);
         }
 
         public async Task<List<CollectionSet>> GetCollectionSets(ApplicationUser collector)
         {
             if (collector == null)
             {
-                return new List<CollectionSet>();
+                return [];
             }
 
-            var cacheKey = $"{CacheKeys.CollectionSets}_{collector.Id}";
-
-            if (cache.Contains(cacheKey))
-            {
-                return cache[cacheKey] as List<CollectionSet>;
-            }
-
-            var collection = await UpdateCollectionSets(collector);
-
-            cache.Add(cacheKey, collection, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
-
-            foreach (var set in collection)
-            {
-                if (set.Set != null)
-                {
-                    set.Set.Cards = null;
-                }
-            }
-
-            return collection;
+            return await repo.Get<CollectionSet>(collector);
         }
 
-        public async Task<List<CollectionSet>> UpdateCollectionSets(ApplicationUser collector)
+        public async Task UpdateCollectionSets(ApplicationUser collector)
         {
             using (var ctx = new MagicCollectorsDbContext())
             {
                 var dbCollector = await ctx.Users
                     .Include(x => x.CollectionSets)
-                    .FirstOrDefaultAsync(x => x.Id == collector.Id);
+                    .FirstAsync(x => x.Id == collector.Id);
 
-                var sets = dbCollector.CollectionSets;
-                var cards = await GetCollectionCards(collector);
-
-                var updatesExists = false;
-
-                var allSets = cards.Select(x => x.Card.Set);
-
-                foreach (var setId in allSets.Select(x => x.Id).Distinct())
+                var collectionCards = await repo.Get<CollectionCard>(collector);
+                var setIds = collectionCards.Select(x => x.Card.Set).Select(x => x.Id).Distinct();
+                foreach (var setId in setIds)
                 {
-                    var setCards = cards.Where(x => x.Card.Set.Id == setId);
+                    var setCards = collectionCards.Where(x => x.Card.Set.Id == setId);
                     var newSet = new CollectionSet()
                     {
                         Set = new Set() { Id = setId }
@@ -194,14 +135,12 @@ namespace MagicCollectors.Services
                         newSet.ValueOfOwnedCards += (card.Count * card.Card.PriceUsd) + (card.FoilCount * card.Card.PriceUsdFoil) + (card.EtchedCount * card.Card.PriceUsdEtched);
                     }
 
-                    var existingSet = sets.FirstOrDefault(x => x.Set.Id == setId);
+                    var existingSet = dbCollector.CollectionSets.FirstOrDefault(x => x.SetId == setId);
                     if (existingSet == null)
                     {
                         newSet.Set = await ctx.Sets.FirstAsync(x => x.Id == newSet.Set.Id);
                         dbCollector.CollectionSets.Add(newSet);
                         await ctx.SaveChangesAsync();
-
-                        updatesExists = true;
                         continue;
                     }
 
@@ -213,20 +152,8 @@ namespace MagicCollectors.Services
                         dbSet.Load(existingSet);
 
                         await ctx.SaveChangesAsync();
-                        updatesExists = true;
                     }
                 }
-
-                if (updatesExists)
-                {
-                    dbCollector = await ctx.Users
-                        .Include(x => x.CollectionSets.Select(x => x.Set))
-                        .FirstOrDefaultAsync(x => x.Id == collector.Id);
-
-                    return dbCollector.CollectionSets;
-                }
-
-                return sets;
             }
         }
     }

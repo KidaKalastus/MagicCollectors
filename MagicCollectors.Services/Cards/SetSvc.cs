@@ -3,6 +3,7 @@ using MagicCollectors.Core.Interfaces.ImportServices;
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using System.Runtime.Caching;
 
 namespace MagicCollectors.Services
@@ -13,15 +14,15 @@ namespace MagicCollectors.Services
         private readonly IImportCardSvc importCardSvc;
         private readonly ICardSvc cardSvc;
         private readonly ICollectionSvc collectionSvc;
-        private static MemoryCache cache;
+        private IRepositorySvc repo;
 
-        public SetSvc(IImportSetSvc importSetSvc, IImportCardSvc importCardSvc, ICardSvc cardSvc, ICollectionSvc collectionSvc)
+        public SetSvc(IImportSetSvc importSetSvc, IImportCardSvc importCardSvc, ICardSvc cardSvc, ICollectionSvc collectionSvc, IRepositorySvc repo)
         {
             this.importSetSvc = importSetSvc;
             this.importCardSvc = importCardSvc;
             this.cardSvc = cardSvc;
             this.collectionSvc = collectionSvc;
-            cache = MemoryCache.Default;
+            this.repo = repo;
         }
 
         public async Task Sync()
@@ -144,12 +145,13 @@ namespace MagicCollectors.Services
 
         public async Task<List<CollectionSet>> Get(ApplicationUser collector = null)
         {
-            var sets = (await GetFromCache()).OrderBy(x => x.ReleaseDate).ToList();
+            var sets = await repo.Get<Set>();
+            sets = sets.OrderBy(x => x.ReleaseDate).ToList();
 
             return await LoadSetsWithCollectionInfo(sets, collector);
         }
 
-        public async Task<List<CollectionSet>> LoadSetsWithCollectionInfo(List<Set> sets, ApplicationUser collector)
+        private async Task<List<CollectionSet>> LoadSetsWithCollectionInfo(List<Set> sets, ApplicationUser collector)
         {
             var result = new List<CollectionSet>();
 
@@ -174,21 +176,6 @@ namespace MagicCollectors.Services
             }
 
             return result;
-        }
-
-        private async Task<List<Set>> GetFromCache()
-        {
-            if (cache.Contains(CacheKeys.Sets))
-            {
-                return cache[CacheKeys.Sets] as List<Set>;
-            }
-
-            using (var ctx = new MagicCollectorsDbContext())
-            {
-                var sets = await ctx.Sets.ToListAsync();
-                cache.Add(CacheKeys.Sets, sets, new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddHours(24) });
-                return sets;
-            }
         }
     }
 }
