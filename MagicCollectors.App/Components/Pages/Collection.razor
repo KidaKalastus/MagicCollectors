@@ -49,17 +49,10 @@ else if (collection.Count == 0)
 }
 else
 {
-    <table>
-        <tr>
-            <td>Icon</td>
-            <td>Code</td>
-            <td>Name</td>
-        </tr>
-        @foreach (var set in shownSets)
-        {
-            <Set set="set" user="user" />
-        }
-    </table>    
+    @foreach (var set in shownSets)
+    {
+        <Set set="set" user="user" />
+    }
 }
 
 @code

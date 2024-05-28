@@ -1,7 +1,7 @@
 ﻿@rendermode InteractiveServer
 
 @inject ICardSvc cardSvc;
-
+@inject ICollectionSvc collectionSvc;
 
 
 <div>
@@ -14,7 +14,7 @@
 
         <div class="grid-child header-button">
 
-            <form @onsubmit="GetCards">
+            <form @onsubmit="ShowCards">
                 <button>Show cards</button>
             </form>
             <form @onsubmit="UpdateCollection">
@@ -23,32 +23,35 @@
         </div>
     </div>
 
-    <div v-show="showCards">
+    @if (cards.Any())
+    {
+        <div v-show="showCards">
 
-        <div class="cards-header">
-            <div class="grid-child">No.</div>
-            <div class="grid-child">Name</div>
-            <div class="grid-child card-numbers">
-                Normal <br />
-                Has / Wants / Price
+            <div class="cards-header">
+                <div class="grid-child">No.</div>
+                <div class="grid-child">Name</div>
+                <div class="grid-child card-numbers">
+                    Normal <br />
+                    Has / Wants / Price
+                </div>
+                <div class="grid-child card-numbers">
+                    Foil <br />
+                    Has / Wants / Price
+                </div>
+                <div class="grid-child card-numbers">
+                    Etched <br />
+                    Has / Wants / Price
+                </div>
             </div>
-            <div class="grid-child card-numbers">
-                Foil <br />
-                Has / Wants / Price
-            </div>
-            <div class="grid-child card-numbers">
-                Etched <br />
-                Has / Wants / Price
-            </div>
+
+            @foreach (var card in cards)
+            {
+                <div>
+                    <Card card="card" user="user" />
+                </div>
+            }
         </div>
-
-        @foreach (var card in cards)
-        {
-            <div>
-                <Card card="card" user="user" />
-            </div>
-        }
-    </div>
+    }
 </div>
 
 <style>
@@ -81,7 +84,7 @@
     [Parameter]
     public ApplicationUser user { get; set; }
     protected List<CollectionCard> cards { get; set; } = new List<CollectionCard>();
-    
+
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         // The list of cards must be reset when a new set is loaded in the component
@@ -89,13 +92,20 @@
         await base.SetParametersAsync(parameters);
     }
 
-    protected async Task GetCards()
+    protected async Task ShowCards()
     {
-        cards = await cardSvc.Get(set.Set, user);
+        if (cards.Any())
+        {
+            cards = new List<CollectionCard>();
+        }
+        else
+        {
+            cards = await cardSvc.Get(set.Set, user);
+        }
     }
 
     protected async Task UpdateCollection()
     {
-        cards = await cardSvc.Get(set.Set, user);
+        cards = await collectionSvc.Update(user, cards);
     }
 }
