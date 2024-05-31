@@ -126,5 +126,13 @@ namespace MagicCollectors.Services
         {
             cache.Remove(cacheKey);
         }
+
+        public void Reset()
+        {
+            foreach (var item in cache)
+            {
+                cache.Remove(item.Key);
+            }
+        }
     }
 }

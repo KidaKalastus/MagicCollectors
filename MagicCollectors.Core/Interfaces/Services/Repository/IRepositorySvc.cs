@@ -9,5 +9,7 @@ namespace MagicCollectors.Core.Interfaces.Services
         Task<List<T>> Get<T>(ApplicationUser applicationUser);
 
         void Reset(string cacheKey);
+
+        void Reset();
     }
 }

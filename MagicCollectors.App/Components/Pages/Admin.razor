@@ -5,15 +5,18 @@
 @using Microsoft.AspNetCore.Authorization
 
 @inject ISetSvc SetSvc
+@inject IRepositorySvc RepoSvc
 
 <PageTitle>Administration</PageTitle>
 
 <h1>Only admins should be able to come here</h1>
 
 <div>
-    <form @onsubmit="SyncDatabase">
-        <button>Sync database</button>
-    </form>
+    <button @onclick="SyncDatabase">Sync database</button>
+</div>
+
+<div>
+    <button @onclick="ResetCache">Reset cache</button>
 </div>
 
 @code
@@ -21,5 +24,10 @@
     private async Task SyncDatabase()
     {
         await SetSvc.Sync();
+    }
+    
+    private void ResetCache()
+    {
+        RepoSvc.Reset();
     }
 }
