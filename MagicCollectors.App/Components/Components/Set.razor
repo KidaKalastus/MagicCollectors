@@ -15,36 +15,63 @@
         <div class="grid-child header-button">
 
             <form @onsubmit="ShowCards">
-                <button>Show cards</button>
+                <button>
+                    @if (cardsOfSet.Any())
+                    {
+                        <span>Hide cards</span>
+                    }
+                    else
+                    {
+                        <span>Show cards</span>
+                    }
+                </button>
             </form>
+
+            <span>Include extras</span>
+            <form @onsubmit="FilterCards">
+
+                <input type="checkbox" @bind="showExtraCards"/>
+                <select @bind="sortOrder">
+                    <option value="CollectorNumber">Collector number</option>
+                    <option value="Name">Name</option>
+                    <option value="Price">Price</option>
+                </select>
+                <button type="submit">Filter cards</button>
+
+            </form>
+
             <form @onsubmit="UpdateCollection">
                 <button>Update collection</button>
             </form>
         </div>
     </div>
 
-    @if (cards.Any())
+    @if (filteredCards.Any())
     {
         <div v-show="showCards">
 
             <div class="cards-header">
                 <div class="grid-child">No.</div>
+                <div class="grid-child">
+                    Want
+                    <button @onclick="WantOneMore">+</button><button @onclick="WantOneLess">-</button>
+                </div>
                 <div class="grid-child">Name</div>
                 <div class="grid-child card-numbers">
                     Normal <br />
-                    Has / Wants / Price
+                    Has / Price
                 </div>
                 <div class="grid-child card-numbers">
                     Foil <br />
-                    Has / Wants / Price
+                    Has / Price
                 </div>
                 <div class="grid-child card-numbers">
                     Etched <br />
-                    Has / Wants / Price
+                    Has / Price
                 </div>
             </div>
 
-            @foreach (var card in cards)
+            @foreach (var card in filteredCards)
             {
                 <div>
                     <Card card="card" user="user" />
@@ -70,7 +97,7 @@
 
     .cards-header {
         display: grid;
-        grid-template-columns: 1fr 6fr 2fr 2fr 2fr;
+        grid-template-columns: 1fr 1fr 6fr 2fr 2fr 2fr;
     }
 
     .card-numbers {
@@ -79,33 +106,80 @@
 </style>
 
 @code {
+
     [Parameter]
     public CollectionSet set { get; set; }
+
     [Parameter]
     public ApplicationUser user { get; set; }
-    protected List<CollectionCard> cards { get; set; } = new List<CollectionCard>();
+
+    protected List<CollectionCard> cardsOfSet { get; set; } = new List<CollectionCard>();
+
+    protected List<CollectionCard> filteredCards { get; set; } = new List<CollectionCard>();
+
+    protected bool showExtraCards { get; set; } = false;
+
+    protected string sortOrder { get; set; } = "CollectorNumber";
 
     public override async Task SetParametersAsync(ParameterView parameters)
     {
         // The list of cards must be reset when a new set is loaded in the component
-        cards = new List<CollectionCard>();
+        cardsOfSet = new List<CollectionCard>();
         await base.SetParametersAsync(parameters);
+        StateHasChanged();  
+    }
+
+    public void FilterCards()
+    {
+        filteredCards = cardsOfSet;
+
+        if(!showExtraCards)
+        {
+            filteredCards = filteredCards.Where(x => !x.Card.Extra).ToList();
+        }
+
+        switch (sortOrder)
+        {
+            case "CollectorNumber":
+                filteredCards = filteredCards.OrderBy(x => x.Card.CollectorNumberSort).ToList();
+                break;
+            case "Name":
+                filteredCards = filteredCards.OrderBy(x => x.Card.Name).ToList();
+                break;
+            case "Price":
+                filteredCards = filteredCards.OrderBy(x => x.Card.PriceUsd).ToList();
+                break;
+            default:
+                break;
+        }
     }
 
     protected async Task ShowCards()
     {
-        if (cards.Any())
+        if (cardsOfSet.Any())
         {
-            cards = new List<CollectionCard>();
+            cardsOfSet = new List<CollectionCard>();
         }
         else
         {
-            cards = await cardSvc.Get(set.Set, user);
+            cardsOfSet = await cardSvc.Get(set.Set, user);
         }
+
+        FilterCards();
     }
 
     protected async Task UpdateCollection()
     {
-        cards = await collectionSvc.Update(user, cards);
+        await collectionSvc.Update(user, cardsOfSet);
+    }
+
+    protected async Task WantOneMore()
+    {
+        filteredCards.ForEach(x => x.Want++);
+    }
+
+    protected async Task WantOneLess()
+    {
+        filteredCards.Where(x => x.Want > 0).ToList().ForEach(x => x.Want--);
     }
 }

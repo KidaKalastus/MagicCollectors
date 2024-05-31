@@ -172,6 +172,16 @@ namespace MagicCollectors.Core.Model
         /// </summary>
         public string? CollectorNumber { get; set; }
 
+        public int CollectorNumberSort
+        {
+            get
+            {
+                int number;
+                bool result = Int32.TryParse(CollectorNumber, out number);
+                return result ? number : 0;
+            }
+        }
+
         /// <summary>
         /// This card’s rarity. One of common, uncommon, rare, special, mythic, or bonus.
         /// Scryfall: rarity

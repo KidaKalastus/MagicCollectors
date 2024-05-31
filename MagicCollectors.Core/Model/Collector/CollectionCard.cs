@@ -29,6 +29,22 @@ namespace MagicCollectors.Core.Model
         /// </summary>
         public int Want { get; set; }
 
+        public int Need
+        {
+            get
+            {
+                return Want - (Count + FoilCount + EtchedCount);
+            }
+        }
+
+        public int Trades
+        {
+            get
+            {
+                return (Count + FoilCount + EtchedCount) - Want;
+            }
+        }
+
         /// <summary>
         /// Number of foil cards wanted in collection
         /// </summary>
@@ -46,6 +62,17 @@ namespace MagicCollectors.Core.Model
         /// </summary>
         [Required]
         public Card Card { get; set; }
+
+        /// <summary>
+        /// If there are no cards in the collection and there are no wants, no need to store information about card in collection
+        /// </summary>
+        public bool IsRelevant
+        {
+            get
+            {
+                return Count + FoilCount + EtchedCount + Want + WantFoil + WantEtched > 0;
+            }
+        }
 
         public void Load(CollectionCard card)
         {

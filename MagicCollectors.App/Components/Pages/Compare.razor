@@ -1,0 +1,94 @@
+﻿@page "/compare"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Identity
+@using MagicCollectors.App.Components.Components
+
+@inject AuthenticationStateProvider authenticationState
+@inject UserManager<ApplicationUser> userManager
+@inject ICollectionSvc collectionSvc
+
+@attribute [Authorize]
+
+<PageTitle>Compare</PageTitle>
+
+<h1>Compare collections</h1>
+
+<span>
+    If you wish to compare your collection with another collection you should ask for the email of the owner.<bt />
+    Once you have their email enter it here and you will be ready to compare collections. Make sure you have entered your own collection and 
+    what cards you want.<br />
+    Remember... if you want 4 of a card and have 3 you are missing one card. On the other hand if you have 5 copies of the card one will 
+    be available for trading. Lastly if you have 4 and want four you neither need the card or have it for trade. In other words. when looking 
+    at how many copies you want, what is currently in your collection is considered.
+</span>
+
+<form @onsubmit="CompareCollections">
+    <input type="text" @bind="CompareEmail" />
+    <button type="submit">Compare</button>
+</form>
+
+<div>
+    <h1>Wanted cards</h1>
+    @if (wantedCards != null && wantedCards.Any())
+    {
+        foreach (var card in wantedCards)
+        {
+            <div>
+                @card.Card.Name, @card.Count <br />
+            </div>
+        }
+    }
+    else
+    {
+        <div>
+            No wanted cards found
+        </div>
+    }
+
+    <h1>Trades</h1>
+    @if (tradeCards != null && tradeCards.Any())
+    {
+        foreach (var card in tradeCards)
+        {
+            <div>
+                @card.Card.Name, @card.Count <br />
+            </div>
+        }
+    }
+    else
+    {
+        <div>
+            No trades found
+        </div>
+    }
+
+</div>
+
+@code
+{
+    private ApplicationUser user = default!;
+
+    private string CompareEmail { get; set; }
+
+    private List<CollectionCard> wantedCards { get; set; } = new List<CollectionCard>();
+
+    private List<CollectionCard> tradeCards { get; set; } = new List<CollectionCard>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState.GetAuthenticationStateAsync();
+        var authUser = authState.User;
+
+        if (authUser.Identity != null && authUser.Identity.IsAuthenticated && !string.IsNullOrEmpty(authUser.Identity.Name))
+        {
+            user = await userManager.FindByNameAsync(authUser.Identity.Name);
+        }
+    }
+
+    public async Task CompareCollections()
+    {
+        wantedCards = await collectionSvc.SearchForWantedCards(user, CompareEmail);
+        tradeCards = await collectionSvc.SearchForTrades(user, CompareEmail);
+    }
+}

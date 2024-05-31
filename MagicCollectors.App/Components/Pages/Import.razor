@@ -1,0 +1,167 @@
+﻿@page "/import"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Identity
+@using MagicCollectors.App.Components.Components
+
+@inject AuthenticationStateProvider authenticationState
+@inject UserManager<ApplicationUser> userManager
+@inject ICollectionSvc collectionSvc
+
+@attribute [Authorize]
+
+<PageTitle>Import</PageTitle>
+
+<EditForm Model="@model">
+
+    <div>
+        Create a csv with collumns in the following format:<br />
+        <ol>
+            <li>Card number</li>
+            <li>Card name</li>
+            <li>Set name</li>
+            <li>Set code</li>
+            <li>Number of cards</li>
+            <li>Format, ie. nothing for normal, "foil" for foil card, "etched" for etched cards</li>
+        </ol>
+        Make sure you use ";" as delimiter.
+    </div>
+
+    <div>
+        <label for="chkDeleteCollection">Delete previously added cards</label>
+        <InputCheckbox @bind-value="model.DeleteOriginalCollection" id="chkDeleteCollection" ValueExpression="@( () => model.DeleteOriginalCollection )" />
+    </div>
+
+    <InputFile OnChange="ImportCollection" />
+</EditForm>
+
+
+@if(model.DeleteOriginalCollection)
+{
+    <div>Collection will be deleted</div>
+}
+else
+{
+    <div>Collection will NOT be deleted</div>
+}
+
+@if(model.RejectedCards.Any())
+{
+    <div>The following cards could not be imported. Perhaps the names or the set of the card could not be found. Try reevaluating your data.</div>
+    
+    <table>
+        <tr>
+            <td>Card number</td>
+            <td>Card name</td>
+            <td>Set name</td>
+            <td>Set code</td>
+            <td>Number of cards</td>
+            <td>Count</td>
+            <td>Count foil</td>
+            <td>Count etched</td>
+        </tr>
+
+        @foreach (var card in model.RejectedCards)
+        {
+            <tr>
+                <td>@card.Card.CollectorNumber</td>
+                <td>@card.Card.Name</td>
+                <td>@card.Card.Set.Name</td>
+                <td>@card.Card.Set.Code</td>
+                <td>@card.Count</td>
+                <td>@card.FoilCount</td>
+                <td>@card.EtchedCount</td>
+            </tr>        
+        }
+
+    </table>
+}
+
+
+@code
+{
+    private ApplicationUser user = default!;
+    private ImportModel model = new ImportModel() { DeleteOriginalCollection = false, RejectedCards = new List<CollectionCard>() };
+
+    public class ImportModel
+    {
+        public bool DeleteOriginalCollection { get; set; }
+        public List<CollectionCard> RejectedCards { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState.GetAuthenticationStateAsync();
+        var authUser = authState.User;
+
+        if (authUser.Identity != null && authUser.Identity.IsAuthenticated && !string.IsNullOrEmpty(authUser.Identity.Name))
+        {
+            user = await userManager.FindByNameAsync(authUser.Identity.Name);
+        }
+    }
+
+    private async Task ImportCollection(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var file = e.File;
+            if (file != null)
+            {
+                using var stream = file.OpenReadStream(5120000);
+                using var reader = new StreamReader(stream);
+
+                var collectionCards = new List<CollectionCard>();
+
+                try
+                {
+                    string line;
+                    while ((line = await reader.ReadLineAsync()) != null)
+                    {
+                        var values = line.Split(';'); // Use ';' if your CSV uses semicolon delimiters
+
+                        var collectionCard = new CollectionCard()
+                            {
+                                Count = Convert.ToInt32(values[4]),
+                                Card = new Core.Model.Card()
+                                {
+                                    CollectorNumber = values[0],
+                                    Name = values[1],
+                                    Set = new Core.Model.Set()
+                                    {
+                                        Name = values[2],
+                                        Code = values[3]
+                                    }
+                                }
+                            };
+
+                        switch (values[5].ToLower())
+                        {
+                            case "foil":
+                                collectionCard.FoilCount = collectionCard.Count;
+                                collectionCard.Count = 0;
+                                break;
+                            case "etched":
+                                collectionCard.EtchedCount = collectionCard.Count;
+                                collectionCard.Count = 0;
+                                break;
+                            default:
+                                break;
+                        }
+
+                        collectionCards.Add(collectionCard);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var something = ex.ToString();
+                }
+
+                model.RejectedCards = await collectionSvc.Import(user, collectionCards, model.DeleteOriginalCollection);
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}

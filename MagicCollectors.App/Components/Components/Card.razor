@@ -1,12 +1,19 @@
 ﻿@rendermode InteractiveServer
 
-<div class="card-view">
+<div class="@GetGridClass()">
     <div class="grid-child">@card.Card.CollectorNumber</div>
+    @if (showSet)
+    {
+        <div class="grid-child">
+            <img src="@card.Card.Set.IconSvgUri" height="18" title="@card.Card.Set.Name" />
+        </div>
+    }
     <div class="grid-child">
-        
+        <input type="number" @bind="@card.Want" />
+    </div>
+    <div class="grid-child">
         @if (card.Card.HasTwoFaces)
         {
-
             <a class="card-name">
                 @firstName
                 <img src="@card.Card.ImageUrlNormal" />
@@ -16,8 +23,6 @@
                 @secondName
                 <img src="@card.Card.ImageUrlNormalBack" />
             </a>
-
-            
         }
         else
         {
@@ -26,7 +31,6 @@
                 <img src="@card.Card.ImageUrlNormal" />
             </a>
         }
-
     </div>
     <div class="grid-child card-numbers">
         <div>
@@ -34,7 +38,6 @@
             {
                 <span>
                     <input type="number" @bind="@card.Count" /> /
-                    <input type="number" @bind="@card.Want" /> /
                     @card.Card.PriceUsd
                 </span>
             }
@@ -46,7 +49,6 @@
             {
                 <span>
                     <input type="number" @bind="@card.FoilCount" /> /
-                    <input type="number" @bind="@card.WantFoil" /> /
                     @card.Card.PriceUsdFoil
                 </span>
             }
@@ -58,7 +60,6 @@
             {
                 <span>
                     <input type="number" @bind="@card.EtchedCount" /> /
-                    <input type="number" @bind="@card.WantEtched" /> /
                     @card.Card.PriceUsdEtched
                 </span>
             }
@@ -69,7 +70,12 @@
 <style>
     .card-view {
         display: grid;
-        grid-template-columns: 1fr 6fr 2fr 2fr 2fr;
+        grid-template-columns: 1fr 1fr 6fr 2fr 2fr 2fr;
+    }
+
+    .card-view-with-set {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 6fr 2fr 2fr 2fr;
     }
 
     .card-name {
@@ -105,6 +111,9 @@
     [Parameter]
     public ApplicationUser user { get; set; }
 
+    [Parameter]
+    public bool showSet { get; set; }
+
     public string? firstName { get; set; }
     public string? secondName { get; set; }
 
@@ -118,6 +127,11 @@
         }
 
         return base.OnInitializedAsync();
+    }
+
+    private string GetGridClass()
+    {
+        return showSet ? "card-view-with-set" : "card-view";
     }
 }
 

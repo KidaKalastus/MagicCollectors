@@ -8,7 +8,33 @@ namespace MagicCollectors.ImportServices
 {
     public class ImportCardSvc : IImportCardSvc
     {
-        public async Task<List<Card>> Get(Set set, bool firstRun = true)
+        public async Task<List<Card>> Get(Set set)
+        {
+            var normalCards = await Get(set, false);
+            var allCards = await Get(set, true);
+
+            foreach (var card in allCards)
+            {
+                if (normalCards.Any(x => x.Id == card.Id))
+                {
+                    card.Extra = false;
+                }
+                else
+                {
+                    card.Extra = true;
+                }
+            }
+
+            if (!allCards.Any(x => !x.Extra))
+            {
+                // All cards are extra cards so... no cards should be extra cards
+                allCards.ForEach(x => x.Extra = false);
+            }
+
+            return allCards;
+        }
+
+        public async Task<List<Card>> Get(Set set, bool getVariants)
         {
             var client = new HttpClient
             {
@@ -19,13 +45,13 @@ namespace MagicCollectors.ImportServices
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));//ACCEPT header
             client.DefaultRequestHeaders.Add("Accept", "application/json");
 
-            var path = $"cards/search?q=set%3a{set.Code}";
+            var path = $"cards/search?q=set%3a{set.Code}+unique%3Aprints";
 
             // All is done twice to get Extra-cards on the second run.
             // Otherwise these cannot be marked as they have no unique variables
-            if (!firstRun)
+            if (!getVariants)
             {
-                path = $"{path}+unique%3Aprints";
+                path = $"{path}+is%3Abooster";
             }
 
             var response = await client.GetAsync(path);
@@ -56,17 +82,6 @@ namespace MagicCollectors.ImportServices
                 }
                 setCollection = JsonSerializer.Deserialize<ScryfallCardCollection>(responseString);
                 result.AddRange(setCollection.data.Select(x => x.MapToCore()).ToList());
-            }
-
-            if (firstRun)
-            {
-                var allCards = await Get(set, false);
-                var extras = allCards.Where(x => !result.Select(y => y.Id).Contains(x.Id)).ToList();
-                foreach (var extra in extras)
-                {
-                    extra.Extra = true;
-                }
-                result.AddRange(extras);
             }
 
             return result;

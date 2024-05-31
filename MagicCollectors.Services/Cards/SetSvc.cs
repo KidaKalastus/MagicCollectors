@@ -76,6 +76,7 @@ namespace MagicCollectors.Services
                             var promoTypes = await ctx.PromoTypes.ToDictionaryAsync(x => x.Name, x => x);
                             var frameEffects = await ctx.FrameEffects.ToDictionaryAsync(x => x.Name, x => x);
                             var cards = await importCardSvc.Get(currentSet);
+
                             var setCards = await ctx.Cards.Where(x => x.Set.Id == currentSet.Id).ToListAsync();
 
                             foreach (var card in cards)

@@ -10,6 +10,6 @@ namespace MagicCollectors.Core.Interfaces.ImportServices
         /// <param name="set"></param>
         /// <param name="firstRun"></param>
         /// <returns></returns>
-        Task<List<Card>> Get(Set set, bool firstRun = true);
+        Task<List<Card>> Get(Set set);
     }
 }

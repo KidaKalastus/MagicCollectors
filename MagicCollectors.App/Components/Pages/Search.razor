@@ -6,9 +6,10 @@
 @using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.AspNetCore.Authorization
 
-@inject AuthenticationStateProvider AuthenticationState
-@inject UserManager<ApplicationUser> UserManager
-@inject ICardSvc CardSvc
+@inject AuthenticationStateProvider authenticationState
+@inject UserManager<ApplicationUser> userManager
+@inject ICardSvc cardSvc
+@inject ICollectionSvc collectionSvc
 
 <PageTitle>Search</PageTitle>
 
@@ -28,21 +29,23 @@ else if(!searchResult.Any())
 }
 else
 {
-    <table>
-        <tr>
-            <td></td>
-            <td>Card name</td>
-            <td>Set</td>
-        </tr>
+    if(user != null)
+    {
+        <form @onsubmit="UpdateCards">
+            <button>Update collection</button>
+            @foreach (var card in searchResult)
+            {
+                <Card card="card" user="user" showSet="true" />
+            }
+        </form>
+    }
+    else
+    {
         @foreach (var card in searchResult)
         {
-            <tr>
-                <td colspan="3">
-                    <Card card="card" user="user" />
-                </td>
-            </tr>
-        }
-    </table>
+            <Card card="card" user="user" showSet="true" />
+        }        
+    }
 }
 
 @code
@@ -53,21 +56,26 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationState.GetAuthenticationStateAsync();
+        var authState = await authenticationState.GetAuthenticationStateAsync();
         var authUser = authState.User;
         if (authUser.Identity.IsAuthenticated)
         {
-            user = await UserManager.FindByNameAsync(authUser.Identity.Name);
+            user = await userManager.FindByNameAsync(authUser.Identity.Name);
         }
     }
 
-    private async Task SearchForCards()  
+    private async Task SearchForCards()
     {
         searchResult = null;
-        if(searchTerm != null && searchTerm.Length > 3)
+        if (searchTerm != null && searchTerm.Length > 3)
         {
-            searchResult = await CardSvc.Search(searchTerm, user);
+            searchResult = await cardSvc.Search(searchTerm, user);
             searchResult = searchResult.OrderBy(x => x.Card.Set.ReleaseDate).OrderBy(x => x.Card.Name).ToList();
         }
+    }
+
+    private async Task UpdateCards()
+    {
+        await collectionSvc.Update(user, searchResult);
     }
 }

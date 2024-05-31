@@ -79,6 +79,10 @@ else
     {
         var type = (SetType)value;
         shownSets = collection.Where(x => x.Set.Type == type).ToList();
+        foreach (var set in shownSets)
+        {
+            set.Set.Cards = new List<Core.Model.Card>();
+        }
         selectTypeId = value;
         StateHasChanged();
     }
