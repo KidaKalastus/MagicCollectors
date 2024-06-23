@@ -10,11 +10,11 @@
         "projectUniqueName": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\MagicCollectors.Core.csproj",
         "projectName": "MagicCollectors.Core",
         "projectPath": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\MagicCollectors.Core.csproj",
-        "packagesPath": "C:\\Users\\weinr\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\LarsSchmidtWeinreich\\.nuget\\packages\\",
         "outputPath": "C:\\Dev\\Repos\\MagicCollectors\\MagicCollectors.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\weinr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LarsSchmidtWeinreich\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -74,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
