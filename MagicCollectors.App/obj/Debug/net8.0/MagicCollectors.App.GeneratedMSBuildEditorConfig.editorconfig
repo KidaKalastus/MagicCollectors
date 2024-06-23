@@ -210,6 +210,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTZWFyY2gucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Dev/Repos/MagicCollectors/MagicCollectors.App/Components/Pages/Wants.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xXYW50cy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Dev/Repos/MagicCollectors/MagicCollectors.App/Components/Routes.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSb3V0ZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

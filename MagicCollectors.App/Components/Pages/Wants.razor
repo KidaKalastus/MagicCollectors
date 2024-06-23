@@ -1,0 +1,101 @@
+﻿@page "/wants"
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Identity
+@using MagicCollectors.App.Components.Components
+
+@inject AuthenticationStateProvider authenticationState
+@inject UserManager<ApplicationUser> userManager
+@inject ICollectionSvc collectionSvc
+
+@attribute [Authorize]
+
+<PageTitle>Manage wants</PageTitle>
+
+<h1>Compare collections</h1>
+
+<span>
+    <p>
+        Here you can make general settings for what cards you want. You can set the number of cards you want, if you want extra cards of a set and 
+        what type of sets you want from.
+    </p>
+    <p>
+        Maybe you are only interested in Core sets? Or expansion sets. Maybe you want one of all cards ever created and maybe you want four of all 
+        non-variants. Whenever a selection is made this will be added to your want list.
+    </p>
+    <p>
+        Remember that if you don't have any wants all your cards are trades. So lets say you have four "Lightning Bolt"s and don't have any wants
+        your four cards will all be up for trade. On the other hand if you have four wants you will not be seeking the card and not have any
+        trade. Trades are the difference between wants and haves.
+    </p>
+    <p>
+        Remember that if you only want certain cards and not add with a general rule you can add wants under your collection.
+    </p>
+</span>
+
+<form @onsubmit="SetWants">
+    <div>
+        Number of copies <input type="Number" @bind="WantCount" />
+    </div>
+    <div>
+        Set type
+        <select @bind="SetTypeId">
+            <option value="0">All sets</option>
+            <option value="1">Core sets</option>
+            <option value="2">Expansion sets</option>
+            <option value="13">Commander</option>
+            <option value="3">Master sets</option>
+            <option value="5">Masterpieces</option>
+            <option value="6">Arsenal</option>
+            <option value="7">From the Vault</option>
+            <option value="8">Spellbook</option>
+            <option value="9">Premium Deck</option>
+            <option value="10">Duel Deck</option>
+            <option value="11">Draft Innovation</option>
+            <option value="12">Treasure Chest</option>
+            <option value="14">Planechase</option>
+            <option value="15">Archenemy</option>
+            <option value="16">Vanguard</option>
+            <option value="17">Funny</option>
+            <option value="18">Starter</option>
+            <option value="19">Box</option>
+            <option value="20">Promo</option>
+            <option value="22">Memorabilia</option>
+            <option value="23">Minigame</option>
+            <option value="4">Alchemy</option>
+            <option value="21">Token</option>
+        </select>
+    </div>
+    <div>
+        Include variants
+        <input type="checkbox" @bind="IncludeVariants" />
+    </div>
+    <button type="submit">Save</button>
+</form>
+
+@code
+{
+    private int WantCount = 0;
+    private bool IncludeVariants = false;
+    private long SetTypeId = 0;
+
+    private ApplicationUser user = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationState.GetAuthenticationStateAsync();
+        var authUser = authState.User;
+
+        if (authUser.Identity != null && authUser.Identity.IsAuthenticated && !string.IsNullOrEmpty(authUser.Identity.Name))
+        {
+            user = await userManager.FindByNameAsync(authUser.Identity.Name);
+        }
+    }
+
+    public async Task SetWants()
+    {
+        var something = IncludeVariants;
+        var somethingElse = WantCount;
+        var somethingElseElse = SetTypeId;
+    }
+}
