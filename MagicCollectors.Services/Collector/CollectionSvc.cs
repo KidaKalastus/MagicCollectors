@@ -2,7 +2,6 @@
 using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Runtime.CompilerServices;
 
 namespace MagicCollectors.Services
@@ -325,6 +324,42 @@ namespace MagicCollectors.Services
                 }
 
                 return await SearchForTrades(otherCollector, collector.Email);
+            }
+        }
+
+        public async Task UpdateWants(ApplicationUser collector, int wantsCount, long setTypeId, bool includeVariants)
+        {
+            using (var ctx = new MagicCollectorsDbContext())
+            {
+                var updateQuery = @$"update CollectionCards Set want = {wantsCount}
+                                        where ApplicationUserId = '{collector.Id}'";
+
+                var insertQuery = @$"insert into CollectionCards
+                                        (Want, Count, FoilCount, WantFoil, EtchedCount, WantEtched, CardId, ApplicationUserId)
+                                        (select {wantsCount}, 0, 0, 0, 0, 0, Id, '{collector.Id}' From Cards
+                                            where Id not in (select CardId from CollectionCards Where ApplicationUserId = '{collector.Id}')";
+
+                if (setTypeId != 0)
+                {
+                    updateQuery = $"{updateQuery} and CardId in (select Id from Cards where SetId in (select Id from Sets where Type = {setTypeId}))";
+                    insertQuery = $"{insertQuery} and SetId in (select Id from Sets where Type = {setTypeId})";
+                }
+
+                if (!includeVariants)
+                {
+                    updateQuery = $"{updateQuery} and CardId in (select Id from Cards where Extra = 0)";
+                    insertQuery = $"{insertQuery} and Extra = 0";
+                }
+
+                insertQuery = $"{insertQuery})";
+
+                await ctx.Database.ExecuteSqlRawAsync(updateQuery);
+                await ctx.Database.ExecuteSqlRawAsync(insertQuery);
+
+                repo.Reset($"{CacheKeys.CollectionSets}_{collector.Id}");
+                repo.Reset($"{CacheKeys.CollectionCards}_{collector.Id}");
+
+                await UpdateCollectionSets(collector);
             }
         }
     }

@@ -3,7 +3,6 @@ using MagicCollectors.Core.Interfaces.Services;
 using MagicCollectors.Core.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.Caching;
-using System.Text.RegularExpressions;
 
 namespace MagicCollectors.Services
 {

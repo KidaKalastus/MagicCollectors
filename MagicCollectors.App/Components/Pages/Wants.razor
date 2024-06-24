@@ -35,11 +35,11 @@
 
 <form @onsubmit="SetWants">
     <div>
-        Number of copies <input type="Number" @bind="WantCount" />
+        Number of copies <input type="Number" @bind="wantCount" />
     </div>
     <div>
         Set type
-        <select @bind="SetTypeId">
+        <select @bind="setTypeId">
             <option value="0">All sets</option>
             <option value="1">Core sets</option>
             <option value="2">Expansion sets</option>
@@ -68,16 +68,16 @@
     </div>
     <div>
         Include variants
-        <input type="checkbox" @bind="IncludeVariants" />
+        <input type="checkbox" @bind="includeVariants" />
     </div>
     <button type="submit">Save</button>
 </form>
 
 @code
 {
-    private int WantCount = 0;
-    private bool IncludeVariants = false;
-    private long SetTypeId = 0;
+    private int wantCount = 0;
+    private bool includeVariants = false;
+    private long setTypeId = 0;
 
     private ApplicationUser user = default!;
 
@@ -94,8 +94,6 @@
 
     public async Task SetWants()
     {
-        var something = IncludeVariants;
-        var somethingElse = WantCount;
-        var somethingElseElse = SetTypeId;
+        await collectionSvc.UpdateWants(user, wantCount, setTypeId, includeVariants);
     }
 }
