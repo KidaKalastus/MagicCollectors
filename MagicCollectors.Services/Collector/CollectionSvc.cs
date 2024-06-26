@@ -327,7 +327,7 @@ namespace MagicCollectors.Services
             }
         }
 
-        public async Task UpdateWants(ApplicationUser collector, int wantsCount, long setTypeId, bool includeVariants)
+        public async Task UpdateWants(ApplicationUser collector, int wantsCount, long setTypeId, bool includeVariants, bool onlyVariants)
         {
             using (var ctx = new MagicCollectorsDbContext())
             {
@@ -349,6 +349,11 @@ namespace MagicCollectors.Services
                 {
                     updateQuery = $"{updateQuery} and CardId in (select Id from Cards where Extra = 0)";
                     insertQuery = $"{insertQuery} and Extra = 0";
+                }
+                else if(onlyVariants)
+                {
+                    updateQuery = $"{updateQuery} and CardId in (select Id from Cards where Extra = 1)";
+                    insertQuery = $"{insertQuery} and Extra = 1";
                 }
 
                 insertQuery = $"{insertQuery})";

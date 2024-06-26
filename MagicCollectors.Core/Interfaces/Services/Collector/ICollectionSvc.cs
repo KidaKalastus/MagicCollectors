@@ -34,6 +34,6 @@ namespace MagicCollectors.Core.Interfaces.Services
         /// <returns></returns>
         Task<List<CollectionCard>> SearchForWantedCards(ApplicationUser collector, string emailOfOtherUser);
 
-        Task UpdateWants(ApplicationUser collector, int wantsCount, long setTypeId, bool includeVariants);
+        Task UpdateWants(ApplicationUser collector, int wantsCount, long setTypeId, bool includeVariants, bool onlyVariants);
     }
 }
