@@ -165,10 +165,10 @@ namespace MagicCollectors.Services
                 {
                     if (deleteCollection)
                     {
-                        var query = $"DELETE FROM CollectionCards WHERE ApplicationUserId = '{collector.Id}'";
+                        var query = $"UPDATE CollectionCards set Count = 0, FoilCount = 0, EtchedCount = 0 WHERE ApplicationUserId = '{collector.Id}' AND Want > 0";
                         await ctx.Database.ExecuteSqlAsync(FormattableStringFactory.Create(query));
 
-                        query = $"DELETE FROM CollectionCards WHERE ApplicationUserId = '{collector.Id}'";
+                        query = $"DELETE FROM CollectionCards WHERE ApplicationUserId = '{collector.Id}' AND Want = 0";
                         await ctx.Database.ExecuteSqlAsync(FormattableStringFactory.Create(query));
                     }
 
@@ -176,11 +176,14 @@ namespace MagicCollectors.Services
                     repo.Reset($"{CacheKeys.CollectionCards}_{collector.Id}");
 
                     collector = await ctx.Users
-                        .Include(x => x.CollectionCards)
                         .Include(x => x.CollectionSets)
                         .FirstAsync(x => x.Id == collector.Id);
 
+                    collector.CollectionCards = await ctx.CollectionCards.Where(x => x.ApplicationUserId == collector.Id).ToListAsync();
+
                     var collectionCards = collector.CollectionCards.ToDictionary(x => x.CardId);
+
+                    var count = 0;
 
                     foreach (var cardToAdd in cardsToAdd)
                     {
@@ -232,6 +235,12 @@ namespace MagicCollectors.Services
                             cardToAdd.Card = null;
                             collector.CollectionCards.Add(cardToAdd);
                             collectionCards.Add(card.Id, cardToAdd);
+                        }
+
+                        count++;
+                        if (count % 50 == 0)
+                        {
+                            await ctx.SaveChangesAsync();
                         }
                     }
 
@@ -350,7 +359,7 @@ namespace MagicCollectors.Services
                     updateQuery = $"{updateQuery} and CardId in (select Id from Cards where Extra = 0)";
                     insertQuery = $"{insertQuery} and Extra = 0";
                 }
-                else if(onlyVariants)
+                else if (onlyVariants)
                 {
                     updateQuery = $"{updateQuery} and CardId in (select Id from Cards where Extra = 1)";
                     insertQuery = $"{insertQuery} and Extra = 1";

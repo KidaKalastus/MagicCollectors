@@ -134,6 +134,13 @@ else
                                 }
                             };
 
+
+                        var collectorNumber = collectionCard.Card.CollectorNumber;
+                        if (!string.IsNullOrEmpty(collectorNumber) && collectorNumber.IndexOf("/") > 0)
+                        {
+                            collectionCard.Card.CollectorNumber = collectorNumber.Substring(0, collectorNumber.IndexOf("/") - 1);
+                        }
+
                         switch (values[5].ToLower())
                         {
                             case "foil":

@@ -57,6 +57,10 @@ namespace MagicCollectors.Core.Model
 
         public Guid CardId { get; set; }
 
+        public string ApplicationUserId { get; set; }
+
+        public ApplicationUser User { get; set; }
+
         /// <summary>
         /// The card in collection
         /// </summary>
